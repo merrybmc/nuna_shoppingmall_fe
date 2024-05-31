@@ -5,12 +5,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../style/login.style.css';
 import { GoogleLogin } from '@react-oauth/google';
 import { useEmailLoginMutation, useGoogleLoginMutation } from '../api/hooks/SignApi';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Login = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const queryClient = useQueryClient();
 
   // 이메일 로그인 mutation
   const { mutate: emailLoginMutate } = useEmailLoginMutation();
@@ -26,9 +29,10 @@ const Login = () => {
       {
         onSuccess: () => {
           navigate('/');
+          queryClient.invalidateQueries(['getUserInfo']);
         },
         onError: (error) => {
-          console.log(error);
+          alert(error.error);
         },
       }
     );
@@ -43,9 +47,10 @@ const Login = () => {
       {
         onSuccess: () => {
           navigate('/');
+          queryClient.invalidateQueries(['getUserInfo']);
         },
         onError: (error) => {
-          console.log(error);
+          alert('구글 로그인 실패');
         },
       }
     );

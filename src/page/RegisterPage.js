@@ -37,7 +37,7 @@ const RegisterPage = () => {
 
     // react-query mutate 로직 처리
     registerMutate(
-      { path: 'api/user', data: { name, email, password } },
+      { path: 'user', data: { name, email, password } },
       {
         onSuccess: () => {
           navigate('/login');

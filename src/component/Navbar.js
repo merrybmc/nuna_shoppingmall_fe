@@ -4,7 +4,8 @@ import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { faBars, faBox, faSearch, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useGetUserInfoQuery } from './../api/hooks/SignApi';
+import { useGetUserInfoQuery, useLogoutMutation } from './../api/hooks/SignApi';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Navbar = ({ user }) => {
   const isMobile = window.navigator.userAgent.indexOf('Mobile') !== -1;
@@ -19,10 +20,13 @@ const Navbar = ({ user }) => {
     'Sale',
     '지속가능성',
   ];
-  const [userInfo, setUserInfo] = useState('');
+  const [userInfo, setUserInfo] = useState(null);
   let [width, setWidth] = useState(0);
 
   let navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+
   const onCheckEnter = (event) => {
     if (event.key === 'Enter') {
       if (event.target.value === '') {
@@ -32,19 +36,30 @@ const Navbar = ({ user }) => {
     }
   };
 
-  const { data: queryUserInfo } = useGetUserInfoQuery('/user');
+  const { data: queryUserInfo, isSuccess } = useGetUserInfoQuery('/user');
+  const { mutate: logoutMutate } = useLogoutMutation();
 
   useEffect(() => {
-    if (queryUserInfo) {
-      if (queryUserInfo.status === 'success') {
-        setUserInfo({ data: queryUserInfo.data });
-      } else if (queryUserInfo.status === 'fail') {
-        setUserInfo('');
-      }
+    if (isSuccess && queryUserInfo) {
+      setUserInfo(queryUserInfo.data);
     }
-  }, [queryUserInfo]);
+  }, [isSuccess, queryUserInfo]);
 
-  const logout = () => {};
+  const logout = () => {
+    logoutMutate(
+      { path: '/auth/logout' },
+      {
+        onSuccess: () => {
+          setUserInfo(null);
+          queryClient.invalidateQueries(['getUserInfo']);
+        },
+        onError: () => {
+          alert('로그아웃 실패');
+        },
+      }
+    );
+  };
+
   return (
     <div>
       {showSearchBox && (
@@ -84,9 +99,12 @@ const Navbar = ({ user }) => {
         <div>
           <div className='display-flex'>
             {userInfo ? (
-              <div onClick={logout} className='nav-icon'>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <FontAwesomeIcon icon={faUser} />
-                {!isMobile && <span style={{ cursor: 'pointer' }}>로그아웃</span>}
+                <span>{userInfo.name}</span>
+                <div onClick={logout} className='nav-icon'>
+                  {!isMobile && <span style={{ cursor: 'pointer' }}>로그아웃</span>}
+                </div>
               </div>
             ) : (
               <div onClick={() => navigate('/login')} className='nav-icon'>

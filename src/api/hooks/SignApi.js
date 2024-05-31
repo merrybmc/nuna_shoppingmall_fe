@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getAsync, postAsync } from '../api';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 // react-query api 호출
 
@@ -28,10 +29,10 @@ export const useGoogleLoginMutation = () => {
 };
 
 // 로그아웃
-export const useLogoutQuery = (path) => {
-  return useQuery({
-    queryKey: ['logout'],
-    queryFn: () => getAsync(path),
+export const useLogoutMutation = () => {
+  return useMutation({
+    mutationKey: ['logout'],
+    mutationFn: ({ path }) => postAsync(path),
   });
 };
 
@@ -41,5 +42,6 @@ export const useGetUserInfoQuery = (path) => {
     queryKey: ['getUserInfo'],
     queryFn: () => getAsync(path),
     enabled: !!path,
+    retry: false,
   });
 };
