@@ -4,8 +4,12 @@ import api from './index';
 
 // GET
 export const getAsync = async (path) => {
-  const res = await api.get(`${path}`);
-  return res.data;
+  try {
+    const res = await api.get(`${path}`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // POST

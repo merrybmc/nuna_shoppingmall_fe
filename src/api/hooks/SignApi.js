@@ -26,3 +26,20 @@ export const useGoogleLoginMutation = () => {
     mutationFn: ({ path, data }) => postAsync(path, data),
   });
 };
+
+// 로그아웃
+export const useLogoutQuery = (path) => {
+  return useQuery({
+    queryKey: ['logout'],
+    queryFn: () => getAsync(path),
+  });
+};
+
+// 회원 정보 조회
+export const useGetUserInfoQuery = (path) => {
+  return useQuery({
+    queryKey: ['getUserInfo'],
+    queryFn: () => getAsync(path),
+    enabled: !!path,
+  });
+};

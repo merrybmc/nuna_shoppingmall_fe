@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { faBars, faBox, faSearch, faShoppingBag } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useGetUserInfoQuery } from './../api/hooks/SignApi';
 
 const Navbar = ({ user }) => {
   const isMobile = window.navigator.userAgent.indexOf('Mobile') !== -1;
@@ -18,7 +19,9 @@ const Navbar = ({ user }) => {
     'Sale',
     '지속가능성',
   ];
+  const [userInfo, setUserInfo] = useState('');
   let [width, setWidth] = useState(0);
+
   let navigate = useNavigate();
   const onCheckEnter = (event) => {
     if (event.key === 'Enter') {
@@ -28,9 +31,20 @@ const Navbar = ({ user }) => {
       navigate(`?name=${event.target.value}`);
     }
   };
-  const logout = () => {
-    // dispatch(userActions.logout());
-  };
+
+  const { data: queryUserInfo } = useGetUserInfoQuery('/user');
+
+  useEffect(() => {
+    if (queryUserInfo) {
+      if (queryUserInfo.status === 'success') {
+        setUserInfo({ data: queryUserInfo.data });
+      } else if (queryUserInfo.status === 'fail') {
+        setUserInfo('');
+      }
+    }
+  }, [queryUserInfo]);
+
+  const logout = () => {};
   return (
     <div>
       {showSearchBox && (
@@ -69,7 +83,7 @@ const Navbar = ({ user }) => {
 
         <div>
           <div className='display-flex'>
-            {user ? (
+            {userInfo ? (
               <div onClick={logout} className='nav-icon'>
                 <FontAwesomeIcon icon={faUser} />
                 {!isMobile && <span style={{ cursor: 'pointer' }}>로그아웃</span>}
