@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import '../style/login.style.css';
 import { GoogleLogin } from '@react-oauth/google';
-import { useEmailLoginMutation } from '../api/hooks/SignApi';
+import { useEmailLoginMutation, useGoogleLoginMutation } from '../api/hooks/SignApi';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,13 +12,17 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // 이메일 로그인 mutation
   const { mutate: emailLoginMutate } = useEmailLoginMutation();
+
+  // 구글 로그인 mutation
+  const { mutate: googleLoginMutate } = useGoogleLoginMutation();
 
   const loginWithEmail = (event) => {
     event.preventDefault();
 
     emailLoginMutate(
-      { path: '/auth/loginemail', data: { email, password } },
+      { path: '/auth/emaillogin', data: { email, password } },
       {
         onSuccess: () => {
           navigate('/');
@@ -32,7 +36,19 @@ const Login = () => {
 
   const handleGoogleLogin = async (googleData) => {
     // 구글로 로그인 하기
-    console.log(googleData);
+
+    const token = { token: googleData.credential };
+    googleLoginMutate(
+      { path: '/auth/googlelogin', data: token },
+      {
+        onSuccess: () => {
+          navigate('/');
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      }
+    );
   };
 
   // if (user) {

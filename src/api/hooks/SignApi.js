@@ -18,3 +18,11 @@ export const useEmailLoginMutation = () => {
     mutationFn: ({ path, data }) => postAsync(path, data),
   });
 };
+
+// 구글 로그인
+export const useGoogleLoginMutation = () => {
+  return useMutation({
+    mutationKey: ['googleLogin'],
+    mutationFn: ({ path, data }) => postAsync(path, data),
+  });
+};
