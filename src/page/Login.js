@@ -3,6 +3,8 @@ import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 
 import '../style/login.style.css';
+import { GoogleLogin } from '@react-oauth/google';
+import { useEmailLoginMutation } from '../api/hooks/SignApi';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,13 +12,27 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const { mutate: emailLoginMutate } = useEmailLoginMutation();
+
   const loginWithEmail = (event) => {
     event.preventDefault();
-    //이메일,패스워드를 가지고 백엔드로 보내기
+
+    emailLoginMutate(
+      { path: '/auth/loginemail', data: { email, password } },
+      {
+        onSuccess: () => {
+          navigate('/');
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      }
+    );
   };
 
   const handleGoogleLogin = async (googleData) => {
     // 구글로 로그인 하기
+    console.log(googleData);
   };
 
   // if (user) {
@@ -61,7 +77,14 @@ const Login = () => {
 
           <div className='text-align-center mt-2'>
             <p>-외부 계정으로 로그인하기-</p>
-            <div className='display-center'></div>
+            <div className='display-center'>
+              <GoogleLogin
+                onSuccess={handleGoogleLogin}
+                onError={() => {
+                  console.log('Login Faild');
+                }}
+              />
+            </div>
           </div>
         </Form>
       </Container>
