@@ -1,17 +1,20 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './reducer/store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 // const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
-ReactDOM.render(
-  <Provider store={store}>
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+const queryClient = new QueryClient();
+
+root.render(
+  <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </Provider>,
-  document.getElementById('root')
+  </QueryClientProvider>
 );
