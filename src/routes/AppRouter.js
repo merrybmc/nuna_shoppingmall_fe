@@ -11,6 +11,7 @@ import ProductAll from '../page/ProductAll';
 import ProductDetail from '../page/ProductDetail';
 import RegisterPage from '../page/RegisterPage';
 import PrivateRoute from './PrivateRoute';
+import SocialLoginCallback from '../api/SocialLoginCallback';
 
 const AppRouter = () => {
   return (
@@ -29,6 +30,7 @@ const AppRouter = () => {
         <Route path='/admin/product' element={<AdminProduct />} />
         <Route path='/admin/order' element={<AdminOrderPage />} />
       </Route>
+      <Route path='/auth/socialLoginCallback' element={<SocialLoginCallback />} />
     </Routes>
   );
 };

@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useGetUserInfoQuery, useLogoutMutation } from './../api/hooks/SignApi';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { userInfoAtom } from '../utils/store';
 
 const Navbar = ({ user }) => {
   const isMobile = window.navigator.userAgent.indexOf('Mobile') !== -1;
@@ -20,7 +22,8 @@ const Navbar = ({ user }) => {
     'Sale',
     '지속가능성',
   ];
-  const [userInfo, setUserInfo] = useState(null);
+
+  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
   let [width, setWidth] = useState(0);
 
   let navigate = useNavigate();
@@ -43,8 +46,9 @@ const Navbar = ({ user }) => {
     if (isSuccess && queryUserInfo) {
       setUserInfo(queryUserInfo.data);
     }
-  }, [isSuccess, queryUserInfo]);
+  }, [isSuccess, queryUserInfo, setUserInfo]);
 
+  // 로그아웃
   const logout = () => {
     logoutMutate(
       { path: '/auth/logout' },
