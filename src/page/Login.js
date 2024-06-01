@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Form, Button, Alert } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-
 import '../style/login.style.css';
 import { GoogleLogin } from '@react-oauth/google';
 import { useEmailLoginMutation, useGoogleLoginMutation } from '../api/hooks/SignApi';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRecoilValue } from 'recoil';
 import { userInfoAtom } from '../utils/store';
+import axios from 'axios';
+import styled from 'styled-components';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -80,17 +81,30 @@ const Login = () => {
   }
 
   // 카카오 로그인
-  const kakaologin = () => {
-    const REACT_APP_KAKAO_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
-    const REACT_APP_REDIRECT_KAKAO_CALLBACK = process.env.REACT_APP_REDIRECT_KAKAO_CALLBACK;
+  const kakaoLogin = () => {
+    const KAKAO_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
+    const REDIRECT_KAKAO_CALLBACK = process.env.REACT_APP_REDIRECT_KAKAO_CALLBACK;
     window.open(
-      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REACT_APP_KAKAO_API_KEY}&redirect_uri=${REACT_APP_REDIRECT_KAKAO_CALLBACK}`,
+      `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_API_KEY}&redirect_uri=${REDIRECT_KAKAO_CALLBACK}`,
       'kakao-login',
       `width=${popupWidth},height=${popupHeight},top=${top},left=${left}`
     );
   };
 
-  // 콜백 navigate 리턴
+  // 깃허브 로그인
+  const githubLogin = () => {
+    const REDIRECT_GITHUB_CALLBACK = process.env.REACT_APP_REDIRECT_GITHUB_CALLBACK;
+    axios
+      .get(REDIRECT_GITHUB_CALLBACK)
+      .then((res) => {
+        window.open(res.data.url, '_blank', 'noopener, noreferrer');
+      })
+      .catch((e) => {
+        setError('GitHub 로그인에 실패했습니다.');
+      });
+  };
+
+  // 소셜 로그인 콜백 navigate 리턴
   useEffect(() => {
     const handleKakaoLoginSuccess = (event) => {
       if (event.data.type === 'loginSuccess') {
@@ -145,14 +159,35 @@ const Login = () => {
 
           <div className='text-align-center mt-2'>
             <p>-외부 계정으로 로그인하기-</p>
-            <div className='display-center'>
+            <div
+              className='display-center'
+              style={{
+                gap: '15px',
+                alignItems: 'center',
+              }}
+            >
               <GoogleLogin
                 onSuccess={handleGoogleLogin}
                 onError={() => {
-                  console.log('Login Faild');
+                  alert('구글 로그인 실패');
                 }}
+              ></GoogleLogin>
+              <img
+                onClick={kakaoLogin}
+                src='/image/kakao.png'
+                width={50}
+                height={50}
+                alt='kakaologo'
+                style={{ cursor: 'pointer' }}
               />
-              <button onClick={kakaologin}>카카오 로그인</button>
+              <img
+                onClick={githubLogin}
+                src='/image/github.png'
+                width={50}
+                height={50}
+                alt='githublogo'
+                style={{ cursor: 'pointer' }}
+              />
             </div>
           </div>
         </Form>
