@@ -57,12 +57,19 @@ const RegisterPage = () => {
     else setFormData({ ...formData, [id]: value });
   };
 
+  const renderError = (error) => {
+    if (error && typeof error === 'object') {
+      return error.error || JSON.stringify(error);
+    }
+    return error;
+  };
+
   return (
     <Container className='register-area'>
       {error && (
         <div>
           <Alert variant='danger' className='error-message'>
-            {error}
+            {renderError(error)}
           </Alert>
         </div>
       )}
