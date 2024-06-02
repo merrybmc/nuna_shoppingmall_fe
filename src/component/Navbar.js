@@ -54,8 +54,9 @@ const Navbar = ({ user }) => {
       { path: '/auth/logout' },
       {
         onSuccess: () => {
-          setUserInfo(null);
           queryClient.invalidateQueries(['getUserInfo']);
+          setUserInfo(null);
+          navigate('/');
         },
         onError: () => {
           alert('로그아웃 실패');
@@ -109,6 +110,7 @@ const Navbar = ({ user }) => {
                 <div onClick={logout} className='nav-icon'>
                   {!isMobile && <span style={{ cursor: 'pointer' }}>로그아웃</span>}
                 </div>
+                <button onClick={() => navigate('/mypage/info')}>마이페이지</button>
               </div>
             ) : (
               <div onClick={() => navigate('/login')} className='nav-icon'>
@@ -116,21 +118,21 @@ const Navbar = ({ user }) => {
                 {!isMobile && <span style={{ cursor: 'pointer' }}>로그인</span>}
               </div>
             )}
-            <div onClick={() => navigate('/cart')} className='nav-icon'>
-              <FontAwesomeIcon icon={faShoppingBag} />
-              {/* {!isMobile && (
+            {/* <div onClick={() => navigate('/cart')} className='nav-icon'> */}
+            {/* <FontAwesomeIcon icon={faShoppingBag} /> */}
+            {/* {!isMobile && (
                 <span style={{ cursor: 'pointer' }}>{`쇼핑백(${cartItemCount || 0})`}</span>
               )} */}
-            </div>
-            <div onClick={() => navigate('/account/purchase')} className='nav-icon'>
-              <FontAwesomeIcon icon={faBox} />
-              {!isMobile && <span style={{ cursor: 'pointer' }}>내 주문</span>}
-            </div>
-            {isMobile && (
-              <div className='nav-icon' onClick={() => setShowSearchBox(true)}>
-                <FontAwesomeIcon icon={faSearch} />
-              </div>
-            )}
+            {/* </div> */}
+            {/* <div onClick={() => navigate('/account/purchase')} className='nav-icon'> */}
+            {/* <FontAwesomeIcon icon={faBox} /> */}
+            {/* {!isMobile && <span style={{ cursor: 'pointer' }}>내 주문</span>} */}
+            {/* </div> */}
+            {/* {isMobile && ( */}
+            {/* <div className='nav-icon' onClick={() => setShowSearchBox(true)}> */}
+            {/* <FontAwesomeIcon icon={faSearch} /> */}
+            {/* </div> */}
+            {/* )} */}
           </div>
         </div>
       </div>

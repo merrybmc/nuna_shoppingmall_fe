@@ -112,13 +112,12 @@ const Login = () => {
         queryClient.invalidateQueries(['getUserInfo']);
       }
     };
-
     window.addEventListener('message', handleKakaoLoginSuccess);
 
     return () => {
       window.removeEventListener('message', handleKakaoLoginSuccess);
     };
-  }, [navigate]);
+  }, [navigate, queryClient]);
 
   return (
     <>

@@ -1,18 +1,19 @@
 import React from 'react';
-import { useEffect } from 'react';
-import { Container } from 'react-bootstrap';
-import OrderStatusCard from '../component/OrderStatusCard';
-import '../style/orderStatus.style.css';
+import Tab from '../component/Mypage/Tab';
+import Section from '../component/Mypage/Section';
+import styled from 'styled-components';
 
-const MyPage = () => {
-  //오더리스트 들고오기
-
-  // 오더리스트가 없다면? 주문한 상품이 없습니다 메세지 보여주기
+export default function MyPage() {
   return (
-    <Container className='status-card-container'>
-      <OrderStatusCard />
+    <Container>
+      <Tab />
+      <Section />
     </Container>
   );
-};
+}
 
-export default MyPage;
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 60px;
+`;
