@@ -52,3 +52,8 @@ export const CheckButton = styled(Button)`
 export const CancelButton = styled(Button)`
   color: black;
 `;
+
+export const ErrorMsg = styled.p`
+  color: red;
+  text-align: center;
+`;

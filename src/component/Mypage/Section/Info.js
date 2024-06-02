@@ -45,7 +45,7 @@ export default function Info() {
         </ContentWrapper>
         {modal && (
           <Modal onClose={onClose}>
-            {change === 'name' && <Name onClose={onClose} />}
+            {change === 'name' && <Name defaultName={userInfo.name} onClose={onClose} />}
             {change === 'password' && <Password onClose={onClose} />}
           </Modal>
         )}

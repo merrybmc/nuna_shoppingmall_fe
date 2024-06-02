@@ -45,3 +45,11 @@ export const useGetUserInfoQuery = (path) => {
     retry: false,
   });
 };
+
+// 이름 변경
+export const useChangeNameMutation = () => {
+  return useMutation({
+    mutationKey: ['changename'],
+    mutationFn: ({ path, data }) => postAsync(path, data),
+  });
+};
