@@ -54,3 +54,10 @@ export const useChangeNameMutation = () => {
     mutationFn: ({ path, data }) => postAsync(path, data),
   });
 };
+
+export const useChangePasswordMutation = () => {
+  return useMutation({
+    mutationKey: ['changepassword'],
+    mutationFn: ({ path, data }) => postAsync(path, data),
+  });
+};
