@@ -55,9 +55,26 @@ export const useChangeNameMutation = () => {
   });
 };
 
+// 비밀번호 변경
 export const useChangePasswordMutation = () => {
   return useMutation({
     mutationKey: ['changepassword'],
     mutationFn: ({ path, data }) => postAsync(path, data),
+  });
+};
+
+// 비밀번호 검증
+export const useValidPasswordMutation = () => {
+  return useMutation({
+    mutationKey: ['validpassword'],
+    mutationFn: ({ path, data }) => postAsync(path, data),
+  });
+};
+
+// 회원 탈퇴
+export const useDeleteUserMutation = () => {
+  return useMutation({
+    mutationKey: ['deleteuser'],
+    mutationFn: ({ path }) => postAsync(path),
   });
 };

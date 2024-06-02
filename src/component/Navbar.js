@@ -5,8 +5,7 @@ import { faBars, faBox, faSearch, faShoppingBag } from '@fortawesome/free-solid-
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useGetUserInfoQuery, useLogoutMutation } from './../api/hooks/SignApi';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userInfoAtom } from '../utils/store';
 
 const Navbar = ({ user }) => {
@@ -27,8 +26,6 @@ const Navbar = ({ user }) => {
   let [width, setWidth] = useState(0);
 
   let navigate = useNavigate();
-
-  const queryClient = useQueryClient();
 
   const onCheckEnter = (event) => {
     if (event.key === 'Enter') {
@@ -54,7 +51,6 @@ const Navbar = ({ user }) => {
       { path: '/auth/logout' },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(['getUserInfo']);
           setUserInfo(null);
           navigate('/');
         },
@@ -108,7 +104,7 @@ const Navbar = ({ user }) => {
                 <FontAwesomeIcon icon={faUser} />
                 <span>{userInfo.name}</span>
                 <div onClick={logout} className='nav-icon'>
-                  {!isMobile && <span style={{ cursor: 'pointer' }}>로그아웃</span>}
+                  <span style={{ cursor: 'pointer' }}>로그아웃</span>
                 </div>
                 <button onClick={() => navigate('/mypage/info')}>마이페이지</button>
               </div>
