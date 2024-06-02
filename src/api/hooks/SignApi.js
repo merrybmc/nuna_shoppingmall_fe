@@ -43,6 +43,7 @@ export const useGetUserInfoQuery = (path) => {
     queryFn: () => getAsync(path),
     enabled: !!path,
     retry: false,
+    refetchOnWindowFocus: false,
   });
 };
 
