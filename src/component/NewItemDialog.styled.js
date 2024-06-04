@@ -36,6 +36,7 @@ export const ImgCount = styled.p`
 
 export const ImgBox = styled.div`
   display: flex;
+
   width: 350px;
   height: 100px;
 
@@ -55,6 +56,8 @@ export const CameraImg = styled.img`
 `;
 
 export const ImgPreviewBox = styled.div`
+  min-width: 80px;
+  height: 40px;
   position: relative;
 `;
 

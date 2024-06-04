@@ -4,6 +4,7 @@ import '../style/adminProduct.style.css';
 import * as S from './NewItemDialog.styled';
 import { useProductCreateMutation } from '../api/hooks/ProductApi';
 import { faL } from '@fortawesome/free-solid-svg-icons';
+import { useQueryClient } from '@tanstack/react-query';
 const SIZE = ['XS', 'S', 'M', 'L', 'XL'];
 const CATEGORY = ['Top', 'Dress', 'Pants'];
 const STATUS = ['active', 'disactive'];
@@ -27,6 +28,8 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const [imageError, setImageError] = useState(false);
   const [imgPreviews, setImgPreviews] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
+
+  const queryClient = useQueryClient();
 
   const { mutate: createMutate, isPending: createLoading } = useProductCreateMutation();
 
@@ -66,13 +69,14 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       const { name, sku, description, category, status, price } = formData;
 
       imageFiles.forEach((file) => {
-        form.append('images', file); // 여러 이미지 파일을 추가
+        form.append('images', file);
       });
+
       form.append('name', name);
       form.append('sku', sku);
-      form.append('stock', JSON.stringify(totalStock)); // stock을 JSON 문자열로 변환
+      form.append('stock', JSON.stringify(totalStock));
       form.append('description', description);
-      form.append('category', JSON.stringify(category)); // category도 JSON 문자열로 변환
+      form.append('category', JSON.stringify(category));
       form.append('status', status);
       form.append('price', price);
 
@@ -81,9 +85,9 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
         {
           onSuccess: () => {
             handleClose();
+            queryClient.invalidateQueries(['getproduct']);
           },
           onError: ({ error }) => {
-            console.log(error);
             error.includes('E11000') && setSkuError(true);
           },
         }
@@ -189,9 +193,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       return;
     }
 
-    fileArray.forEach((file) => {
-      setImageFiles([...imageFiles, file]);
-    });
+    setImageFiles((prevFiles) => [...prevFiles, ...fileArray]);
 
     const filePreviews = fileArray.map((file) => resizeImage(file));
 
@@ -355,6 +357,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
                   multiple
                   style={{ display: 'none' }}
                   onChange={handleFileChange}
+                  accept='image/*'
                 />
                 <S.CameraImg src='/image/camera.png' />
                 <S.ImgCount>{imgPreviews.length}/5</S.ImgCount>

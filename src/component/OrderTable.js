@@ -2,6 +2,7 @@ import React from 'react';
 import { Table, Badge } from 'react-bootstrap';
 import { currencyFormat } from '../utils/number';
 const OrderTable = ({ header, data, openEditForm }) => {
+  console.log(data);
   return (
     <div className='overflow-x'>
       <Table striped bordered hover>
