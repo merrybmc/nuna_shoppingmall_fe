@@ -112,6 +112,7 @@ const Login = () => {
         queryClient.invalidateQueries(['getUserInfo']);
       }
     };
+
     window.addEventListener('message', handleKakaoLoginSuccess);
 
     return () => {

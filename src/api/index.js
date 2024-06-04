@@ -8,10 +8,6 @@ console.log(LOCAL_BACKEND);
 
 const api = axios.create({
   baseURL: `${LOCAL_BACKEND}/api`,
-  headers: {
-    'Content-Type': 'application/json',
-    authorization: `Bearer ${sessionStorage.getItem('token')}`,
-  },
   withCredentials: true,
 });
 /**
@@ -19,8 +15,6 @@ const api = axios.create({
  */
 api.interceptors.request.use(
   (request) => {
-    console.log('Starting Request', request);
-    request.headers.authorization = `Bearer ${sessionStorage.getItem('token')}`;
     return request;
   },
   function (error) {

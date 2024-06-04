@@ -1,93 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Modal, Button, Row, Col } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import CloudinaryUploadWidget from '../utils/CloudinaryUploadWidget';
+import { productActions } from '../action/productAction';
+import { CATEGORY, STATUS, SIZE } from '../constants/product.constants';
 import '../style/adminProduct.style.css';
-import * as S from './NewItemDialog.styled';
-import { useProductCreateMutation } from '../api/hooks/ProductApi';
-import { faL } from '@fortawesome/free-solid-svg-icons';
-const SIZE = ['XS', 'S', 'M', 'L', 'XL'];
-const CATEGORY = ['Top', 'Dress', 'Pants'];
-const STATUS = ['active', 'disactive'];
+import * as types from '../constants/product.constants';
+import { commonUiActions } from '../action/commonUiAction';
+import { Cloudinary } from '@cloudinary/url-gen';
+
+const CLOUDINARY_CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_PRESET = process.env.REACT_APP_CLOUDINARY_PRESET;
 
 const InitialFormData = {
   name: '',
   sku: '',
   stock: {},
-  image: [],
+  image: '',
   description: '',
   category: [],
   status: 'active',
   price: 0,
 };
-
 const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
-  const [formData, setFormData] = useState(InitialFormData);
+  const selectedProduct = useSelector((state) => state.product.selectedProduct);
+  const { error } = useSelector((state) => state.product);
+  const [formData, setFormData] = useState(
+    mode === 'new' ? { ...InitialFormData } : selectedProduct
+  );
   const [stock, setStock] = useState([]);
-  const [skuError, setSkuError] = useState(false);
+  const dispatch = useDispatch();
   const [stockError, setStockError] = useState(false);
-  const [imageError, setImageError] = useState(false);
-  const [imgPreviews, setImgPreviews] = useState([]);
-  const [imageFiles, setImageFiles] = useState([]);
 
-  const { mutate: createMutate, isPending: createLoading } = useProductCreateMutation();
+  const [cloudName] = useState(CLOUDINARY_CLOUD_NAME);
+  const [uploadPreset] = useState(CLOUDINARY_PRESET);
+
+  const [uwConfig] = useState({
+    cloudName,
+    uploadPreset,
+  });
+
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName,
+    },
+  });
 
   const handleClose = () => {
-    setFormData(InitialFormData);
-    setSkuError(false);
-    setStockError(false);
-    setImageError(false);
-    setImgPreviews([]);
-    setImageFiles([]);
-    setStock([]);
-    setShowDialog(false);
+    //모든걸 초기화시키고;
+    // 다이얼로그 닫아주기
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    if (!stock.length) {
-      setStockError(true);
-      return;
-    } else {
-      setStockError(false);
-    }
-
-    if (!imageFiles.length) {
-      setImageError(true);
-      return;
-    } else {
-      setImageError(false);
-    }
-
-    const totalStock = stock.reduce((total, item) => {
-      return { ...total, [item[0]]: parseInt(item[1]) };
-    }, {});
-
+    //재고를 입력했는지 확인, 아니면 에러
+    // 재고를 배열에서 객체로 바꿔주기
+    // [['M',2]] 에서 {M:2}로
     if (mode === 'new') {
-      let form = new FormData();
-      const { name, sku, description, category, status, price } = formData;
-
-      imageFiles.forEach((file) => {
-        form.append('images', file); // 여러 이미지 파일을 추가
-      });
-      form.append('name', name);
-      form.append('sku', sku);
-      form.append('stock', JSON.stringify(totalStock)); // stock을 JSON 문자열로 변환
-      form.append('description', description);
-      form.append('category', JSON.stringify(category)); // category도 JSON 문자열로 변환
-      form.append('status', status);
-      form.append('price', price);
-
-      createMutate(
-        { path: '/product', data: form },
-        {
-          onSuccess: () => {
-            handleClose();
-          },
-          onError: ({ error }) => {
-            console.log(error);
-            error.includes('E11000') && setSkuError(true);
-          },
-        }
-      );
+      //새 상품 만들기
     } else {
       // 상품 수정하기
     }
@@ -113,18 +83,15 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   //  재고 사이즈 변환하기
   const handleSizeChange = (value, index) => {
     const newStock = [...stock];
-    newStock[index][0] = value;
     setStock(newStock);
   };
 
   // 재고 수량 변경하기
   const handleStockChange = (value, index) => {
     const newStock = [...stock];
-    newStock[index][1] = value;
     setStock(newStock);
   };
 
-  // 카테고리 변경
   const onHandleCategory = (event) => {
     if (formData.category.includes(event.target.value)) {
       const newCategory = formData.category.filter((item) => item !== event.target.value);
@@ -140,6 +107,10 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     }
   };
 
+  const uploadImage = (url) => {
+    //이미지 업로드
+  };
+
   useEffect(() => {
     if (showDialog) {
       if (mode === 'edit') {
@@ -151,101 +122,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   }, [showDialog]);
 
   //에러나면 토스트 메세지 보여주기
-
-  // 이미지 생성 시작 target.files 넘기기
-  const handleFileChange = (e) => {
-    e.target.files && processFiles(e.target.files);
-  };
-
-  // 이미지 끌어와서 생성하기
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.dataTransfer.files && processFiles(e.dataTransfer.files);
-  };
-
-  // 이미지 업로드 로직, 조건 검사
-  const processFiles = (fileList) => {
-    let sameFileCheck = false;
-
-    if (fileList.length + imgPreviews.length > 5) {
-      alert('최대 5장만 업로드 가능합니다.');
-      return;
-    }
-
-    const fileArray = Array.from(fileList);
-
-    fileArray.forEach((file) =>
-      imgPreviews.forEach((img) => {
-        if (file.lastModified === img.id) {
-          sameFileCheck = true;
-          return;
-        }
-      })
-    );
-
-    if (sameFileCheck) {
-      alert('동일한 사진이 존재합니다.');
-      return;
-    }
-
-    fileArray.forEach((file) => {
-      setImageFiles([...imageFiles, file]);
-    });
-
-    const filePreviews = fileArray.map((file) => resizeImage(file));
-
-    Promise.all(filePreviews).then((files) => {
-      setImgPreviews((prevFiles) => [...prevFiles, ...files]);
-    });
-  };
-
-  // 이미지 리사이징
-  const resizeImage = (file) => {
-    return new Promise((resolve) => {
-      const img = new Image();
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (e) => {
-        img.src = e.target.result.toString();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          const maxWidth = 500;
-          const maxHeight = 500;
-          let { width, height } = img;
-
-          if (width > height) {
-            if (width > maxWidth) {
-              height *= maxWidth / width;
-              width = maxWidth;
-            }
-          } else {
-            if (height > maxHeight) {
-              width *= maxHeight / height;
-              height = maxHeight;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          ctx.drawImage(img, 0, 0, width, height);
-          const resizedImage = canvas.toDataURL('image/png');
-
-          resolve({ name: file.name, preview: resizedImage, id: file.lastModified });
-        };
-      };
-    });
-  };
-
-  // 이미지 삭제
-  const deleteImage = (id) => {
-    const deletedImgPreviews = imgPreviews.filter((file) => id !== file.id);
-    const deletedImageFiles = imageFiles.filter((file) => id !== file.lastModified);
-
-    setImgPreviews(deletedImgPreviews);
-    setImageFiles(deletedImageFiles);
-  };
 
   return (
     <Modal show={showDialog} onHide={handleClose}>
@@ -268,7 +144,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
               required
               value={formData.sku}
             />
-            {skuError && <p className='error-message'>동일한 이름의 상품이 존재합니다.</p>}
           </Form.Group>
 
           <Form.Group as={Col} controlId='name'>
@@ -346,33 +221,14 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
         </Form.Group>
 
         <Form.Group className='mb-3' controlId='Image' required>
-          <S.AddImgBox>
-            <label htmlFor='imageInput'>
-              <S.ImgDragOnBox onDrop={handleDrop} onDragOver={(e) => e.preventDefault()}>
-                <input
-                  type='file'
-                  id='imageInput'
-                  multiple
-                  style={{ display: 'none' }}
-                  onChange={handleFileChange}
-                />
-                <S.CameraImg src='/image/camera.png' />
-                <S.ImgCount>{imgPreviews.length}/5</S.ImgCount>
-              </S.ImgDragOnBox>
-            </label>
-            <S.ImgBox>
-              {imgPreviews.map((file) => (
-                <S.ImgPreviewBox key={file.preview}>
-                  <S.ImgDeleteBox
-                    src='/image/delete_button.png'
-                    onClick={() => deleteImage(file.id)}
-                  />
-                  <S.ImgPreview src={file.preview} alt='Preview' />
-                </S.ImgPreviewBox>
-              ))}
-            </S.ImgBox>
-          </S.AddImgBox>
-          {imageError && <p className='error-message'>이미지를 최소 1개 이상 추가해주세요.</p>}
+          <Form.Label>Image</Form.Label>
+          <CloudinaryUploadWidget uwConfig={uwConfig} setFormData={setFormData} />
+          <img
+            id='uploadedimage'
+            src={formData.image}
+            className='upload-image mt-2'
+            alt='uploadedimage'
+          ></img>
         </Form.Group>
 
         <Row className='mb-3'>
@@ -403,6 +259,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
               ))}
             </Form.Control>
           </Form.Group>
+
           <Form.Group as={Col} controlId='status'>
             <Form.Label>Status</Form.Label>
             <Form.Select value={formData.status} onChange={handleChange} required>
@@ -424,15 +281,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           </Button>
         )}
       </Form>
-      {createLoading && (
-        <S.ApiSpinner
-          thickness='7px'
-          speed='0.5s'
-          emptyColor='cyan.200'
-          color='blue.500'
-          size='xl'
-        />
-      )}
     </Modal>
   );
 };

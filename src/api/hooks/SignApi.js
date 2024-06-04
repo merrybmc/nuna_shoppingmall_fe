@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getAsync, postAsync } from '../api';
-import { faL } from '@fortawesome/free-solid-svg-icons';
 
 // react-query api 호출
 
