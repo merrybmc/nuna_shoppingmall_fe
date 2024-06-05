@@ -4,6 +4,12 @@ import reset from 'styled-reset';
 const GlobalStyle = createGlobalStyle`
     ${reset}
 
+    /* body{
+display: flex;
+justify-content: center;
+align-items: center;
+    } */
+
     * {
         box-sizing: border-box;
         padding: 0;

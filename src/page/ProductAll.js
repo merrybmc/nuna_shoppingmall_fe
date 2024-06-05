@@ -1,19 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ProductCard from '../component/ProductCard';
-import { Row, Col, Container } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
+
+import * as S from './ProductAll.styled';
 
 const ProductAll = () => {
   // 처음 로딩하면 상품리스트 불러오기
 
   return (
-    <Container>
-      <Row>
-        <Col md={3} sm={12}>
-          <ProductCard />
-        </Col>
-      </Row>
-    </Container>
+    <S.Container>
+      <ProductCard />
+    </S.Container>
   );
 };
 

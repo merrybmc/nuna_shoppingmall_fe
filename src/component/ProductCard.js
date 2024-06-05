@@ -1,6 +1,6 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { currencyFormat } from "../utils/number";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as S from './ProductCard.styled';
 
 const ProductCard = () => {
   const navigate = useNavigate();
@@ -8,14 +8,384 @@ const ProductCard = () => {
     // 상품 디테일 페이지로 가기
   };
   return (
-    <div className="card" onClick={() => showProduct("hard_code")}>
-      <img
-        src="https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F3a%2F04%2F3a04ededbfa6a7b535e0ffa30474853fc95d2e81.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/fullscreen]"
-        alt=""
-      />
-      <div>리넨셔츠</div>
-      <div>₩ 45,000</div>
-    </div>
+    <S.Container>
+      <S.ProductContainer>
+        <S.MenuTitle>Men</S.MenuTitle>
+        <S.ProductWrapper>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+        </S.ProductWrapper>
+        <S.MoreBtn>더보기</S.MoreBtn>
+        <S.Hr />
+      </S.ProductContainer>
+      <S.ProductContainer>
+        <S.MenuTitle>Women</S.MenuTitle>
+        <S.ProductWrapper>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+        </S.ProductWrapper>
+        <S.MoreBtn>더보기</S.MoreBtn>
+        <S.Hr />
+      </S.ProductContainer>
+      <S.ProductContainer>
+        <S.MenuTitle>KIDS</S.MenuTitle>
+        <S.ProductWrapper>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+        </S.ProductWrapper>
+        <S.MoreBtn>더보기</S.MoreBtn>
+        <S.Hr />
+      </S.ProductContainer>
+      <S.ProductContainer>
+        <S.MenuTitle>TOP</S.MenuTitle>
+        <S.ProductWrapper>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+        </S.ProductWrapper>
+        <S.MoreBtn>더보기</S.MoreBtn>
+        <S.Hr />
+      </S.ProductContainer>
+      <S.ProductContainer>
+        <S.MenuTitle>BOTTOM</S.MenuTitle>
+        <S.ProductWrapper>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+        </S.ProductWrapper>
+        <S.MoreBtn>더보기</S.MoreBtn>
+        <S.Hr />
+      </S.ProductContainer>
+      <S.ProductContainer>
+        <S.MenuTitle>SHOES</S.MenuTitle>
+        <S.ProductWrapper>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+        </S.ProductWrapper>
+        <S.MoreBtn>더보기</S.MoreBtn>
+        <S.Hr />
+      </S.ProductContainer>
+      <S.ProductContainer>
+        <S.MenuTitle>BAG</S.MenuTitle>
+        <S.ProductWrapper>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+        </S.ProductWrapper>
+        <S.MoreBtn>더보기</S.MoreBtn>
+        <S.Hr />
+      </S.ProductContainer>
+      <S.ProductContainer>
+        <S.MenuTitle>ACCESSORY</S.MenuTitle>
+        <S.ProductWrapper>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+          <S.ProductBox>
+            <S.ProductImgBox>
+              <S.ProductImg src='https://1746b291a6740af9.kinxzone.com/upload/images/product/1503/1503110/Product_1717312643734_cache_300_300.jpg' />
+            </S.ProductImgBox>
+            <S.ProductTitle>플렉서블</S.ProductTitle>
+            <S.ProductDescription>ddddddddddddd</S.ProductDescription>
+            <S.Price>100000원</S.Price>
+          </S.ProductBox>
+        </S.ProductWrapper>
+        <S.MoreBtn>더보기</S.MoreBtn>
+        <S.Hr />
+      </S.ProductContainer>
+    </S.Container>
   );
 };
 

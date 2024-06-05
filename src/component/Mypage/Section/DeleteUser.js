@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import * as S from './section.styled';
 import Modal from '../../../utils/Modal';
 import DeleteUserCheck from '../../Modal/DeleteUserCheck';
-import { useValidPasswordMutation } from '../../../api/hooks/SignApi';
-import { useRecoilValue } from 'recoil';
-import { userInfoAtom } from '../../../utils/store';
+import { useGetUserInfoQuery, useValidPasswordMutation } from '../../../api/hooks/SignApi';
 
 export default function DeleteUser() {
   const [modal, setModal] = useState(false);
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const userInfo = useRecoilValue(userInfoAtom);
+
+  const { data: userInfo } = useGetUserInfoQuery('/user');
 
   const onOpenModal = (button) => {
     setModal(true);
@@ -27,7 +26,7 @@ export default function DeleteUser() {
   const { mutate: validPasswordMutate } = useValidPasswordMutation();
 
   const onPasswordValid = () => {
-    if (userInfo.kind === 'email') {
+    if (userInfo.data.kind === 'email') {
       validPasswordMutate(
         { path: '/user/validpassword', data: { password } },
         {
@@ -50,21 +49,21 @@ export default function DeleteUser() {
       <S.Container>
         <S.Title>
           회원 탈퇴
-          {userInfo.kind === 'email' && (
+          {userInfo.data.kind === 'email' && (
             <S.TitleDes>회원탈퇴를 진행하기 위해 본인 확인이 필요합니다.</S.TitleDes>
           )}
         </S.Title>
         <S.ContentWrapper style={{ alignItems: 'flex-start', paddingLeft: '150px' }}>
-          {userInfo.kind === 'google' && (
+          {userInfo.data.kind === 'google' && (
             <p style={{ paddingLeft: '120px' }}>구글로 로그인한 계정입니다.</p>
           )}
-          {userInfo.kind === 'kakao' && (
+          {userInfo.data.kind === 'kakao' && (
             <p style={{ paddingLeft: '120px' }}>카카오로 로그인한 계정입니다.</p>
           )}
-          {userInfo.kind === 'github' && (
+          {userInfo.data.kind === 'github' && (
             <p style={{ paddingLeft: '120px' }}>깃허브로 로그인한 계정입니다.</p>
           )}
-          {userInfo.kind === 'email' && (
+          {userInfo.data.kind === 'email' && (
             <div>
               <S.ContentBox>
                 <S.SubTitle style={{ width: '90px' }}>비밀번호</S.SubTitle>

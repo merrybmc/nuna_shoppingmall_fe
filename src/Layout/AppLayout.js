@@ -3,6 +3,7 @@ import { useLocation } from 'react-router';
 import Sidebar from '../component/Sidebar';
 import Navbar from '../component/Navbar';
 import ToastMessage from '../component/ToastMessage';
+import styled from 'styled-components';
 
 const AppLayout = ({ children }) => {
   const location = useLocation();
@@ -11,7 +12,7 @@ const AppLayout = ({ children }) => {
   useEffect(() => {}, []);
 
   return (
-    <div>
+    <>
       <ToastMessage />
       {location.pathname.includes('admin') ? (
         <div>
@@ -24,7 +25,7 @@ const AppLayout = ({ children }) => {
           {children}
         </>
       )}
-    </div>
+    </>
   );
 };
 

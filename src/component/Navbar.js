@@ -7,25 +7,20 @@ import { useNavigate } from 'react-router-dom';
 import { useGetUserInfoQuery, useLogoutMutation } from './../api/hooks/SignApi';
 import { useRecoilState } from 'recoil';
 import { userInfoAtom } from '../utils/store';
+import * as S from './Navbar.styled';
+import SearchBox from './SearchBox';
+import { useQueryClient } from '@tanstack/react-query';
+import { LayoutMaxWidth } from '../style/common.styled';
 
 const Navbar = ({ user }) => {
-  const isMobile = window.navigator.userAgent.indexOf('Mobile') !== -1;
-  const [showSearchBox, setShowSearchBox] = useState(false);
-  const menuList = [
-    '여성',
-    'Divided',
-    '남성',
-    '신생아/유아',
-    '아동',
-    'H&M HOME',
-    'Sale',
-    '지속가능성',
-  ];
-
-  const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
-  let [width, setWidth] = useState(0);
-
   let navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const menuList = ['WOMEN', 'MEN', 'KIDS', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACCESSORY'];
+
+  const { data: userInfo } = useGetUserInfoQuery('/user');
+
+  console.log(userInfo);
 
   const onCheckEnter = (event) => {
     if (event.key === 'Enter') {
@@ -36,23 +31,15 @@ const Navbar = ({ user }) => {
     }
   };
 
-  const { data: queryUserInfo, isSuccess } = useGetUserInfoQuery('/user');
   const { mutate: logoutMutate } = useLogoutMutation();
 
-  useEffect(() => {
-    if (isSuccess && queryUserInfo) {
-      setUserInfo(queryUserInfo.data);
-    }
-  }, [isSuccess, queryUserInfo, setUserInfo]);
-
-  // 로그아웃
   const logout = () => {
     logoutMutate(
       { path: '/auth/logout' },
       {
         onSuccess: () => {
-          setUserInfo(null);
           navigate('/');
+          window.location.reload();
         },
         onError: () => {
           alert('로그아웃 실패');
@@ -62,83 +49,42 @@ const Navbar = ({ user }) => {
   };
 
   return (
-    <div>
-      {showSearchBox && (
-        <div className='display-space-between mobile-search-box w-100'>
-          <div className='search display-space-between w-100'>
-            <div>
-              <FontAwesomeIcon className='search-icon' icon={faSearch} />
-              <input type='text' placeholder='제품검색' onKeyPress={onCheckEnter} />
-            </div>
-            <button className='closebtn' onClick={() => setShowSearchBox(false)}>
-              &times;
-            </button>
-          </div>
-        </div>
-      )}
-      <div className='side-menu' style={{ width: width }}>
-        <button className='closebtn' onClick={() => setWidth(0)}>
-          &times;
-        </button>
-
-        <div className='side-menu-list' id='menu-list'>
-          {menuList.map((menu, index) => (
-            <button key={index}>{menu}</button>
-          ))}
-        </div>
-      </div>
-      {userInfo?.level === 'admin' && (
-        <Link to='/admin/product?page=1' className='link-area'>
-          Admin page
-        </Link>
-      )}
-      <div className='nav-header'>
-        <div className='burger-menu hide'>
-          <FontAwesomeIcon icon={faBars} onClick={() => setWidth(250)} />
-        </div>
-
-        <div>
-          <div className='display-flex'>
+    <S.Layout>
+      <S.Fixed>
+        <S.Container>
+          <S.UserMenu>
+            {userInfo?.data.level === 'admin' && <Link to='/admin/product?page=1'>ADMIN PAGE</Link>}
+            <button onClick={() => navigate('/mypage/info')}>MYPAGE</button>
+            <button onClick={() => navigate('/cart')}>SHOPPING BAG</button>
             {userInfo ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <FontAwesomeIcon icon={faUser} />
-                <span>{userInfo.name}</span>
-                <div onClick={logout} className='nav-icon'>
-                  <span style={{ cursor: 'pointer' }}>로그아웃</span>
-                </div>
-                <button onClick={() => navigate('/mypage/info')}>마이페이지</button>
-              </div>
+              <button onClick={logout} style={{ cursor: 'pointer' }}>
+                LOGOUT
+              </button>
             ) : (
-              <div onClick={() => navigate('/login')} className='nav-icon'>
-                <FontAwesomeIcon icon={faUser} />
-                {!isMobile && <span style={{ cursor: 'pointer' }}>로그인</span>}
-              </div>
+              <button onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>
+                LOGIN
+              </button>
             )}
-            {/* <div onClick={() => navigate('/cart')} className='nav-icon'> */}
-            {/* <FontAwesomeIcon icon={faShoppingBag} /> */}
-            {/* {!isMobile && (
-                <span style={{ cursor: 'pointer' }}>{`쇼핑백(${cartItemCount || 0})`}</span>
-              )} */}
-            {/* </div> */}
-            {/* <div onClick={() => navigate('/account/purchase')} className='nav-icon'> */}
-            {/* <FontAwesomeIcon icon={faBox} /> */}
-            {/* {!isMobile && <span style={{ cursor: 'pointer' }}>내 주문</span>} */}
-            {/* </div> */}
-            {/* {isMobile && ( */}
-            {/* <div className='nav-icon' onClick={() => setShowSearchBox(true)}> */}
-            {/* <FontAwesomeIcon icon={faSearch} /> */}
-            {/* </div> */}
-            {/* )} */}
-          </div>
-        </div>
-      </div>
+          </S.UserMenu>
 
-      <div className='nav-logo'>
-        <Link to='/'>
-          <img width={100} src='/image/hm-logo.png' alt='hm-logo.png' />
-        </Link>
-      </div>
-      <div className='nav-menu-area'>
+          <S.LogoSearchWrapper>
+            <S.LogoBtn onClick={() => navigate('/')}>
+              <S.LogoImg src='/image/logo.png' alt='logo.png' />
+            </S.LogoBtn>
+            <S.SearchBox>
+              <S.SearchInput />
+              <S.SearchIcon />
+            </S.SearchBox>
+          </S.LogoSearchWrapper>
+
+          <S.MenuList>
+            {menuList.map((menu, index) => (
+              <S.Menu key={index}>{menu}</S.Menu>
+            ))}
+          </S.MenuList>
+
+          {/* </Link> */}
+          {/* <div className='nav-menu-area'>
         <ul className='menu'>
           {menuList.map((menu, index) => (
             <li key={index}>
@@ -152,8 +98,10 @@ const Navbar = ({ user }) => {
             <input type='text' placeholder='제품검색' onKeyPress={onCheckEnter} />
           </div>
         )}
-      </div>
-    </div>
+      </div> */}
+        </S.Container>
+      </S.Fixed>
+    </S.Layout>
   );
 };
 

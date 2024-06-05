@@ -3,10 +3,10 @@ import { Form, Modal, Button, Row, Col } from 'react-bootstrap';
 import '../style/adminProduct.style.css';
 import * as S from './NewItemDialog.styled';
 import { useProductCreateMutation } from '../api/hooks/ProductApi';
-import { faL } from '@fortawesome/free-solid-svg-icons';
 import { useQueryClient } from '@tanstack/react-query';
-const SIZE = ['XS', 'S', 'M', 'L', 'XL'];
-const CATEGORY = ['Top', 'Dress', 'Pants'];
+const SIZE = ['S', 'M', 'L', 'XL'];
+const KIND = ['WOMEN', 'MEN', 'KIDS'];
+const CATEGORY = ['TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACCESSORY'];
 const STATUS = ['active', 'disactive'];
 
 const InitialFormData = {
@@ -15,7 +15,8 @@ const InitialFormData = {
   stock: {},
   image: [],
   description: '',
-  category: [],
+  kind: '',
+  category: '',
   status: 'active',
   price: 0,
 };
@@ -66,7 +67,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
     if (mode === 'new') {
       let form = new FormData();
-      const { name, sku, description, category, status, price } = formData;
+      const { name, sku, description, kind, category, status, price } = formData;
 
       imageFiles.forEach((file) => {
         form.append('images', file);
@@ -76,7 +77,8 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       form.append('sku', sku);
       form.append('stock', JSON.stringify(totalStock));
       form.append('description', description);
-      form.append('category', JSON.stringify(category));
+      form.append('kind', kind);
+      form.append('category', category);
       form.append('status', status);
       form.append('price', price);
 
@@ -128,20 +130,21 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     setStock(newStock);
   };
 
+  // 종류 변경
+  const onHandleKind = (event) => {
+    setFormData({
+      ...formData,
+      kind: event.target.value,
+    });
+  };
+
   // 카테고리 변경
   const onHandleCategory = (event) => {
-    if (formData.category.includes(event.target.value)) {
-      const newCategory = formData.category.filter((item) => item !== event.target.value);
-      setFormData({
-        ...formData,
-        category: [...newCategory],
-      });
-    } else {
-      setFormData({
-        ...formData,
-        category: [...formData.category, event.target.value],
-      });
-    }
+    console.log(event.target.value);
+    setFormData({
+      ...formData,
+      category: event.target.value,
+    });
   };
 
   useEffect(() => {
@@ -390,11 +393,21 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
             />
           </Form.Group>
 
+          <Form.Group as={Col} controlId='kind'>
+            <Form.Label>Kind</Form.Label>
+            <Form.Control as='select' onChange={onHandleKind} value={formData.kind} required>
+              {KIND.map((item, idx) => (
+                <option key={idx} value={item.toLowerCase()}>
+                  {item}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+
           <Form.Group as={Col} controlId='category'>
             <Form.Label>Category</Form.Label>
             <Form.Control
               as='select'
-              multiple
               onChange={onHandleCategory}
               value={formData.category}
               required
