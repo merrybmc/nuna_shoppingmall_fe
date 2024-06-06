@@ -5,8 +5,8 @@ import * as S from './NewItemDialog.styled';
 import { useProductCreateMutation } from '../api/hooks/ProductApi';
 import { useQueryClient } from '@tanstack/react-query';
 const SIZE = ['S', 'M', 'L', 'XL'];
-const KIND = ['WOMEN', 'MEN', 'KIDS'];
-const CATEGORY = ['TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACCESSORY'];
+const KIND = ['', 'WOMEN', 'MEN', 'KIDS'];
+const CATEGORY = ['', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACCESSORY'];
 const STATUS = ['active', 'disactive'];
 
 const InitialFormData = {
@@ -15,8 +15,8 @@ const InitialFormData = {
   stock: {},
   image: [],
   description: '',
-  kind: null,
-  category: null,
+  kind: '',
+  category: '',
   status: 'active',
   price: 0,
 };
@@ -47,6 +47,9 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (formData.kind === '' && formData.category === '') {
+      alert('kind 또는 category를 선택해주세요');
+    }
     if (!stock.length) {
       setStockError(true);
       return;

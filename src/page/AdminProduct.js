@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import ProductTable from '../component/ProductTable';
 import { useGetProductsQuery } from '../api/hooks/ProductApi';
+import * as S from './AdminProduct.styled';
 
 const AdminProduct = () => {
   const navigate = useNavigate();
@@ -44,6 +45,7 @@ const AdminProduct = () => {
   };
 
   const handlePageClick = ({ selected }) => {
+    setSearchQuery({ ...searchQuery, page: selected + 1 });
     //  쿼리에 페이지값 바꿔주기
   };
 
@@ -68,26 +70,14 @@ const AdminProduct = () => {
           deleteItem={deleteItem}
           openEditForm={openEditForm}
         />
-        <ReactPaginate
-          nextLabel='next >'
+        <S.ReactPaginateStyle
+          nextLabel=' >'
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={100}
+          pageCount={products?.data.totalPageNum} // 전체 페이지
           forcePage={2} // 1페이지면 2임 여긴 한개씩 +1 해야함
-          previousLabel='< previous'
+          previousLabel='< '
           renderOnZeroPageCount={null}
-          pageClassName='page-item'
-          pageLinkClassName='page-link'
-          previousClassName='page-item'
-          previousLinkClassName='page-link'
-          nextClassName='page-item'
-          nextLinkClassName='page-link'
-          breakLabel='...'
-          breakClassName='page-item'
-          breakLinkClassName='page-link'
-          containerClassName='pagination'
-          activeClassName='active'
-          className='display-center list-style-none'
         />
       </Container>
 
