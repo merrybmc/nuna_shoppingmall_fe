@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as S from './ProductCard.styled';
 import { useGetProductsQuery } from '../api/hooks/ProductApi';
+import { currencyFormat } from './../utils/number';
 
 const ProductCard = ({ filter }) => {
   const { data } = useGetProductsQuery('/product', {
@@ -30,17 +31,17 @@ const ProductCard = ({ filter }) => {
         <S.MenuTitle>{filter.toUpperCase()}</S.MenuTitle>
         <S.ProductWrapper>
           {filterData?.map((product) => (
-            <S.ProductBox>
+            <S.ProductBox onClick={() => alert('coming soon')}>
               <S.ProductImgBox>
                 <S.ProductImg src={product.images[0]} />
               </S.ProductImgBox>
               <S.ProductTitle>{product.name}</S.ProductTitle>
               <S.ProductDescription>{product.description}</S.ProductDescription>
-              <S.Price>{product.price}원</S.Price>
+              <S.Price>{currencyFormat(product.price)}원</S.Price>
             </S.ProductBox>
           ))}
         </S.ProductWrapper>
-        <S.MoreBtn>더보기</S.MoreBtn>
+        <S.MoreBtn onClick={() => alert('coming soon')}>더보기</S.MoreBtn>
         <S.Hr />
       </S.ProductContainer>
     </S.Container>

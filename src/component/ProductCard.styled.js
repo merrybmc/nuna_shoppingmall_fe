@@ -29,8 +29,9 @@ export const ProductWrapper = styled.div`
 
 export const ProductBox = styled.div`
   width: 262px;
-
   padding: 4px;
+
+  cursor: pointer;
   &:hover {
     background-color: #f0f0f0;
   }
@@ -113,7 +114,9 @@ export const MoreBtn = styled.button`
   border-radius: 12px;
   font-size: 14px;
   color: #5e6564;
-  margin-top: 20px;
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
   padding-left: 30px;
   padding-right: 30px;
 `;

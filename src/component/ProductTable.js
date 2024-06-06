@@ -3,11 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import { currencyFormat } from '../utils/number';
 import { useGetProductsQuery } from '../api/hooks/ProductApi';
-const ProductTable = ({ header, deleteItem, openEditForm }) => {
-  const { data: products, isLoading, error } = useGetProductsQuery('/product');
-
-  console.log(header);
-  console.log(products);
+const ProductTable = ({ products, header, deleteItem, openEditForm }) => {
   return (
     <div className='overflow-x'>
       <Table striped bordered hover>
@@ -34,6 +30,7 @@ const ProductTable = ({ header, deleteItem, openEditForm }) => {
                           display: 'flex',
                           // height: '140px',
                           alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       >
                         {Object.entries(count).map(([size, quantity]) => (

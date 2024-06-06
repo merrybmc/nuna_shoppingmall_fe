@@ -19,8 +19,12 @@ const AdminProduct = () => {
   const [mode, setMode] = useState('new');
   const tableHeader = ['#', 'Sku', 'Name', 'Price', 'Stock', 'Image', 'Status', ''];
 
+  const { data: products, isLoading, error } = useGetProductsQuery('/product', searchQuery);
+
   useEffect(() => {
-    //검색어나 페이지가 바뀌면 url바꿔주기 (검색어또는 페이지가 바뀜 => url 바꿔줌=> url쿼리 읽어옴=> 이 쿼리값 맞춰서  상품리스트 가져오기)
+    const params = new URLSearchParams(searchQuery);
+    setQuery(params);
+    console.log(searchQuery);
   }, [searchQuery]);
 
   const deleteItem = (id) => {
@@ -58,7 +62,12 @@ const AdminProduct = () => {
           Add New Item +
         </Button>
 
-        <ProductTable header={tableHeader} deleteItem={deleteItem} openEditForm={openEditForm} />
+        <ProductTable
+          header={tableHeader}
+          products={products}
+          deleteItem={deleteItem}
+          openEditForm={openEditForm}
+        />
         <ReactPaginate
           nextLabel='next >'
           onPageChange={handlePageClick}

@@ -27,6 +27,7 @@ const Navbar = ({ user }) => {
       if (event.target.value === '') {
         return navigate('/');
       }
+      alert('coming soon');
       navigate(`?name=${event.target.value}`);
     }
   };
@@ -55,7 +56,14 @@ const Navbar = ({ user }) => {
           <S.UserMenu>
             {userInfo?.data.level === 'admin' && <Link to='/admin/product?page=1'>ADMIN PAGE</Link>}
             <button onClick={() => navigate('/mypage/info')}>MYPAGE</button>
-            <button onClick={() => navigate('/cart')}>SHOPPING BAG</button>
+            <button
+              onClick={() => {
+                alert('coming soon');
+                navigate('/cart');
+              }}
+            >
+              SHOPPING BAG
+            </button>
             {userInfo ? (
               <button onClick={logout} style={{ cursor: 'pointer' }}>
                 LOGOUT
@@ -72,14 +80,16 @@ const Navbar = ({ user }) => {
               <S.LogoImg src='/image/logo.png' alt='logo.png' />
             </S.LogoBtn>
             <S.SearchBox>
-              <S.SearchInput />
+              <S.SearchInput onKeyDown={(e) => onCheckEnter(e)} />
               <S.SearchIcon />
             </S.SearchBox>
           </S.LogoSearchWrapper>
 
           <S.MenuList>
             {menuList.map((menu, index) => (
-              <S.Menu key={index}>{menu}</S.Menu>
+              <S.Menu onClick={() => alert('coming soon')} key={index}>
+                {menu}
+              </S.Menu>
             ))}
           </S.MenuList>
 
