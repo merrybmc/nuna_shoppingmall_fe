@@ -10,10 +10,10 @@ export const useProductCreateMutation = () => {
 };
 
 // 상품 읽어오기
-export const useGetProductsQuery = (path) => {
+export const useGetProductsQuery = (path, params) => {
   return useQuery({
-    queryKey: ['getproduct'],
-    queryFn: () => getAsync(path),
+    queryKey: ['getproduct', params],
+    queryFn: () => getAsync(path, params),
     retry: false,
     refetchOnWindowFocus: false,
   });

@@ -22,7 +22,7 @@ const AppLayout = ({ children }) => {
       ) : (
         <>
           <Navbar user={user} />
-          {children}
+          <Layout>{children}</Layout>
         </>
       )}
     </>
@@ -30,3 +30,7 @@ const AppLayout = ({ children }) => {
 };
 
 export default AppLayout;
+
+const Layout = styled.div`
+  padding-top: 265px;
+`;

@@ -15,8 +15,8 @@ const InitialFormData = {
   stock: {},
   image: [],
   description: '',
-  kind: '',
-  category: '',
+  kind: null,
+  category: null,
   status: 'active',
   price: 0,
 };

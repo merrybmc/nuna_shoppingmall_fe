@@ -3,12 +3,13 @@ import styled from 'styled-components';
 export const Container = styled.div``;
 
 export const ProductContainer = styled.div`
-  max-width: 1280px;
+  max-width: 1312px;
   width: 100%;
   margin: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  overflow: hidden;
+  /* align-items: center; */
 `;
 
 export const MenuTitle = styled.h2`
@@ -18,7 +19,7 @@ export const MenuTitle = styled.h2`
   padding-top: 40px;
   padding-bottom: 20px;
   align-self: flex-start;
-  padding-left: 40px;
+  /* padding-left: 40px; */
   text-align: left;
 `;
 
@@ -27,7 +28,8 @@ export const ProductWrapper = styled.div`
 `;
 
 export const ProductBox = styled.div`
-  cursor: pointer;
+  width: 262px;
+
   padding: 4px;
   &:hover {
     background-color: #f0f0f0;
@@ -35,8 +37,8 @@ export const ProductBox = styled.div`
 `;
 
 export const ProductImgBox = styled.div`
-  width: 234px;
-  height: 234px;
+  width: 254px;
+  height: 254px;
   background-color: #f4f4f4;
 
   border-radius: 10px;
@@ -57,13 +59,26 @@ export const ProductTitle = styled.h3`
   padding-bottom: 2px;
   padding-left: 4px;
   padding-right: 4px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const ProductDescription = styled.p`
+  height: 35px;
   font-family: proxima-nova;
   font-size: 13px;
   padding-left: 4px;
   padding-right: 4px;
+
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 export const Price = styled.p`
