@@ -12,11 +12,13 @@ import SearchBox from './SearchBox';
 import { useQueryClient } from '@tanstack/react-query';
 import { LayoutMaxWidth } from '../style/common.styled';
 
+const menuList = ['WOMEN', 'MEN', 'KIDS', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACCESSORY'];
+
 const Navbar = ({ user }) => {
   let navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const menuList = ['WOMEN', 'MEN', 'KIDS', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACCESSORY'];
+  const [searchInput, setSearchInput] = useState('');
 
   const { data: userInfo } = useGetUserInfoQuery('/user');
 
@@ -25,11 +27,20 @@ const Navbar = ({ user }) => {
   const onCheckEnter = (event) => {
     if (event.key === 'Enter') {
       if (event.target.value === '') {
-        return navigate('/');
+        onSearch();
       }
-      alert('coming soon');
+      queryClient.invalidateQueries('[getproduct]');
       navigate(`?name=${event.target.value}`);
     }
+  };
+
+  const onSearch = () => {
+    if (searchInput === '') {
+      queryClient.invalidateQueries('[getproduct]');
+      return navigate('/');
+    }
+    queryClient.invalidateQueries('[getproduct]');
+    navigate(`?name=${searchInput}`);
   };
 
   const { mutate: logoutMutate } = useLogoutMutation();
@@ -80,8 +91,12 @@ const Navbar = ({ user }) => {
               <S.LogoImg src='/image/logo.png' alt='logo.png' />
             </S.LogoBtn>
             <S.SearchBox>
-              <S.SearchInput onKeyDown={(e) => onCheckEnter(e)} />
-              <S.SearchIcon />
+              <S.SearchInput
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => onCheckEnter(e)}
+              />
+              <S.SearchIcon onClick={onSearch} />
             </S.SearchBox>
           </S.LogoSearchWrapper>
 
