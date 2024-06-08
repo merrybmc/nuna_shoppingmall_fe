@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import * as S from './ProductCard.styled';
 import { currencyFormat } from './../utils/number';
+import { useNavigate } from 'react-router';
 
 const ProductCard = ({ data, filter }) => {
   const [filterData, setFilterData] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (data) {
@@ -12,17 +14,16 @@ const ProductCard = ({ data, filter }) => {
     }
   }, [data]);
 
-  // const navigate = useNavigate();
-  // const showProduct = (id) => {
-  //   // 상품 디테일 페이지로 가기
-  // };
+  const showProduct = (id, product) => {
+    navigate(`/product/${id}`, { state: { product } });
+  };
   return (
     <S.Container>
       <S.ProductContainer>
         <S.MenuTitle>{filter.toUpperCase()}</S.MenuTitle>
         <S.ProductWrapper>
           {filterData?.map((product) => (
-            <S.ProductBox key={product._id} onClick={() => alert('coming soon')}>
+            <S.ProductBox key={product._id} onClick={() => showProduct(product._id, product)}>
               <S.ProductImgBox>
                 <S.ProductImg src={product.images[0]} />
               </S.ProductImgBox>

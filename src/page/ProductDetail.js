@@ -1,22 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Container, Row, Col, Button, Dropdown } from 'react-bootstrap';
 import { ColorRing } from 'react-loader-spinner';
 import { currencyFormat } from '../utils/number';
 import '../style/productDetail.style.css';
+import { useGetUserInfoQuery } from '../api/hooks/SignApi';
+import { useCartCreateMutation } from '../api/hooks/CartApi';
 
 const ProductDetail = () => {
   const [size, setSize] = useState('');
   const { id } = useParams();
   const [sizeError, setSizeError] = useState(false);
 
+  const { data: userInfo } = useGetUserInfoQuery('/user');
+  const { mutate: createCartMutate, isSuccess, error } = useCartCreateMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      alert('카트 추가 성공');
+    }
+    if (error) {
+      alert('이미 카트에 추가되어 있습니다.');
+    }
+  }, [isSuccess, error]);
+
+  const {
+    state: { product },
+  } = useLocation();
+
+  console.log(product);
+
   const navigate = useNavigate();
 
   const addItemToCart = () => {
-    //사이즈를 아직 선택안했다면 에러
-    // 아직 로그인을 안한유저라면 로그인페이지로
-    // 카트에 아이템 추가하기
+    if (size === '') {
+      setSizeError(true);
+      return;
+    }
+
+    if (!userInfo) navigate('/login');
+
+    const addProduct = { productId: product._id, size, qty: 1 };
+
+    createCartMutate({ path: '/cart', data: addProduct });
   };
+
   const selectSize = (value) => {
     // 사이즈 추가하기
   };
@@ -33,22 +61,21 @@ const ProductDetail = () => {
     <Container className='product-detail-card'>
       <Row>
         <Col sm={6}>
-          <img
-            src='https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F3a%2F04%2F3a04ededbfa6a7b535e0ffa30474853fc95d2e81.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/fullscreen]'
-            className='w-100'
-            alt='image'
-          />
+          <img src={product.images[0]} className='w-100' alt='image' />
         </Col>
         <Col className='product-info-area' sm={6}>
-          <div className='product-info'>리넨셔츠</div>
-          <div className='product-info'>₩ 45,000</div>
-          <div className='product-info'>샘플설명</div>
+          <div className='product-info'>{product.name}</div>
+          <div className='product-info'>₩ {product.price}</div>
+          <div className='product-info'>{product.description}</div>
 
           <Dropdown
             className='drop-down size-drop-down'
             title={size}
             align='start'
-            onSelect={(value) => selectSize(value)}
+            onSelect={(value) => {
+              setSize(value);
+              setSizeError(false);
+            }}
           >
             <Dropdown.Toggle
               className='size-drop-down'
@@ -60,7 +87,18 @@ const ProductDetail = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu className='size-drop-down'>
-              <Dropdown.Item>M</Dropdown.Item>
+              {Object.keys(product.stock).length > 0 &&
+                Object.entries(product.stock[0]).map(([key, value]) =>
+                  value > 0 ? (
+                    <Dropdown.Item eventKey={key}>
+                      {`${key.toUpperCase()} : ${value}`}
+                    </Dropdown.Item>
+                  ) : (
+                    <Dropdown.Item eventKey={key} disabled={true}>
+                      {`${key.toUpperCase()} : ${value}`}
+                    </Dropdown.Item>
+                  )
+                )}
             </Dropdown.Menu>
           </Dropdown>
           <div className='warning-message'>{sizeError && '사이즈를 선택해주세요.'}</div>

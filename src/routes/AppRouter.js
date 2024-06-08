@@ -43,6 +43,7 @@ const AppRouter = () => {
       <Route path='/product' element={<Product />}>
         <Route path=':menu/:category' element={<MenuTable />} />
       </Route>
+      <Route path='/product/:id' element={<ProductDetail />} />
       <Route path='/auth/socialLoginCallback' element={<SocialLoginCallback />} />
     </Routes>
   );

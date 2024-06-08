@@ -47,8 +47,8 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       );
       setStock(transformedStock);
       console.log(formData);
+      console.log(formData);
     }
-    console.log(formData);
   }, [baseProduct]);
 
   const queryClient = useQueryClient();
@@ -406,10 +406,13 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
             <S.ImgBox>
               {imgPreviews.map((file) => (
                 <S.ImgPreviewBox key={file.preview}>
-                  <S.ImgDeleteBox
-                    src='/image/delete_button.png'
-                    onClick={() => deleteImage(file.id)}
-                  />
+                  {file.preview.includes('amazonaws') || (
+                    <S.ImgDeleteBox
+                      src='/image/delete_button.png'
+                      onClick={() => deleteImage(file.id)}
+                    />
+                  )}
+
                   <S.ImgPreview src={file.preview} alt='Preview' />
                 </S.ImgPreviewBox>
               ))}
