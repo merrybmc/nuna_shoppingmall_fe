@@ -65,7 +65,10 @@ export default function MenuTable() {
         <S.ProductWrapper>
           {productList?.data?.products?.map((product) => {
             return (
-              <S.ProductBox key={product._id}>
+              <S.ProductBox
+                key={product?._id}
+                onClick={() => navigate(`/product/${product?._id}`, { state: { product } })}
+              >
                 <S.ProductImgBox>
                   <S.ProductImg src={product.images[0]} />
                 </S.ProductImgBox>
