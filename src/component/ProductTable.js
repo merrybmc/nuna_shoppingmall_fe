@@ -2,12 +2,12 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { currencyFormat } from '../utils/number';
 import * as S from './ProductTable.styled';
-import { useNavigate } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 import { updateProductAtom } from '../utils/store';
 
 const ProductTable = ({ products, header, deleteItem, openEditForm }) => {
   const setUpdateProduct = useSetRecoilState(updateProductAtom);
+
   return (
     <div>
       <S.Container>

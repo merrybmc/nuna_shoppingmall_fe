@@ -28,3 +28,9 @@ export const putAsync = async (path, data) => {
   const res = await api.put(`${path}`, data);
   return res.data;
 };
+
+// DELETE
+export const DeleteAsync = async (path) => {
+  const res = await api.delete(`${path}`);
+  return res.data;
+};

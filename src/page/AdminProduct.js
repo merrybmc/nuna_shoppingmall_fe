@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import SearchBox from '../component/SearchBox';
 import NewItemDialog from '../component/NewItemDialog';
-import ReactPaginate from 'react-paginate';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import ProductTable from '../component/ProductTable';
-import { useGetProductsQuery } from '../api/hooks/ProductApi';
+import { useGetProductsQuery, useProductDeleteMutation } from '../api/hooks/ProductApi';
 import * as S from './AdminProduct.styled';
+import { useQueryClient } from '@tanstack/react-query';
 
 const AdminProduct = () => {
-  const navigate = useNavigate();
   const [query, setQuery] = useSearchParams();
   const [showDialog, setShowDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState({
@@ -21,6 +20,9 @@ const AdminProduct = () => {
   const tableHeader = ['#', 'Sku', 'Name', 'Price', 'Stock', 'Image', 'Status', ''];
 
   const { data: products, isLoading, error } = useGetProductsQuery('/product', searchQuery);
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteProductMutate } = useProductDeleteMutation();
 
   useEffect(() => {
     const params = new URLSearchParams(searchQuery);
@@ -38,7 +40,17 @@ const AdminProduct = () => {
   }
 
   const deleteItem = (id) => {
-    //아이템 삭제
+    deleteProductMutate(
+      { path: `/product/${id}` },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['getproduct']);
+        },
+        onError: () => {
+          alert('상품 삭제 실패');
+        },
+      }
+    );
   };
 
   const openEditForm = () => {
