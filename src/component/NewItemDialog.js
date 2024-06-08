@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Form, Modal, Button, Row, Col } from 'react-bootstrap';
 import '../style/adminProduct.style.css';
 import * as S from './NewItemDialog.styled';
-import { useProductCreateMutation } from '../api/hooks/ProductApi';
+import { useProductCreateMutation, useProductUpdateMutation } from '../api/hooks/ProductApi';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRecoilValue } from 'recoil';
+import { updateProductAtom } from '../utils/store.js';
+
 const SIZE = ['S', 'M', 'L', 'XL'];
 const KIND = ['', 'WOMEN', 'MEN', 'KIDS'];
 const CATEGORY = ['', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACCESSORY'];
@@ -29,10 +32,29 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const [imageError, setImageError] = useState(false);
   const [imgPreviews, setImgPreviews] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
+  const baseProduct = useRecoilValue(updateProductAtom);
+
+  useEffect(() => {
+    if (mode === 'edit' && baseProduct) {
+      setFormData(baseProduct);
+      setImgPreviews(
+        baseProduct.images.map((data) => {
+          return { preview: data };
+        })
+      );
+      const transformedStock = baseProduct.stock.flatMap((item) =>
+        Object.entries(item).map(([key, value]) => [key, value])
+      );
+      setStock(transformedStock);
+      console.log(formData);
+    }
+    console.log(formData);
+  }, [baseProduct]);
 
   const queryClient = useQueryClient();
 
   const { mutate: createMutate, isPending: createLoading } = useProductCreateMutation();
+  const { mutate: updateMutate, isPending: updateLoading } = useProductUpdateMutation();
 
   const handleClose = () => {
     setFormData(InitialFormData);
@@ -44,6 +66,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     setStock([]);
     setShowDialog(false);
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -68,23 +91,23 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       return { ...total, [item[0]]: parseInt(item[1]) };
     }, {});
 
-    if (mode === 'new') {
-      let form = new FormData();
-      const { name, sku, description, kind, category, status, price } = formData;
+    let form = new FormData();
+    const { name, sku, description, kind, category, status, price } = formData;
 
-      imageFiles.forEach((file) => {
-        form.append('images', file);
-      });
+    imageFiles.forEach((file) => {
+      form.append('images', file);
+    });
 
-      form.append('name', name);
-      form.append('sku', sku);
-      form.append('stock', JSON.stringify(totalStock));
-      form.append('description', description);
-      form.append('kind', kind);
-      form.append('category', category);
-      form.append('status', status);
-      form.append('price', price);
+    form.append('name', name);
+    form.append('sku', sku);
+    form.append('stock', JSON.stringify(totalStock));
+    form.append('description', description);
+    form.append('kind', kind);
+    form.append('category', category);
+    form.append('status', status);
+    form.append('price', price);
 
+    if (mode === 'new')
       createMutate(
         { path: '/product', data: form },
         {
@@ -97,9 +120,20 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           },
         }
       );
-    } else {
-      // 상품 수정하기
-    }
+
+    if (mode === 'edit')
+      updateMutate(
+        { path: `/product/${formData._id}`, data: form },
+        {
+          onSuccess: () => {
+            handleClose();
+            queryClient.invalidateQueries(['getproduct']);
+          },
+          onError: ({ error }) => {
+            error.includes('E11000') && setSkuError(true);
+          },
+        }
+      );
   };
 
   //form에 데이터 넣어주기
@@ -443,7 +477,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           </Button>
         )}
       </Form>
-      {createLoading && (
+      {(createLoading || updateLoading) && (
         <S.ApiSpinner
           thickness='7px'
           speed='0.5s'

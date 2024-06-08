@@ -25,32 +25,38 @@ const AdminProduct = () => {
   useEffect(() => {
     const params = new URLSearchParams(searchQuery);
     setQuery(params);
-    console.log(searchQuery);
   }, [searchQuery]);
 
+  if (isLoading) {
+    return (
+      <S.ApiSpinner thickness='7px' speed='0.5s' emptyColor='cyan.200' color='blue.500' size='xl' />
+    );
+  }
+
+  if (error) {
+    return <div>Error loading products</div>;
+  }
+
   const deleteItem = (id) => {
-    //아이템 삭제하rl
+    //아이템 삭제
   };
 
-  const openEditForm = (product) => {
-    //edit모드로 설정하고
-    // 아이템 수정다이얼로그 열어주기
+  const openEditForm = () => {
+    setMode('edit');
+    setShowDialog(true);
   };
 
   const handleClickNewItem = () => {
-    //new 모드로 설정하고
-    // 다이얼로그 열어주기
     setMode('new');
     setShowDialog(true);
   };
 
   const handlePageClick = ({ selected }) => {
     setSearchQuery({ ...searchQuery, page: selected + 1 });
-    //  쿼리에 페이지값 바꿔주기
   };
 
   return (
-    <div className='locate-center'>
+    <div>
       <Container>
         <div className='mt-2'>
           <SearchBox
@@ -74,13 +80,12 @@ const AdminProduct = () => {
           nextLabel=' >'
           onPageChange={handlePageClick}
           pageRangeDisplayed={5}
-          pageCount={products?.data.totalPageNum} // 전체 페이지
-          forcePage={2} // 1페이지면 2임 여긴 한개씩 +1 해야함
+          pageCount={products?.data?.totalPageNum} // 전체 페이지
+          forcePage={searchQuery.page - 1} // 페이지 값 조정
           previousLabel='< '
           renderOnZeroPageCount={null}
         />
       </Container>
-
       <NewItemDialog mode={mode} showDialog={showDialog} setShowDialog={setShowDialog} />
     </div>
   );

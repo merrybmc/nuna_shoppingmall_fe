@@ -1,30 +1,74 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  max-width: 1170px;
+  display: flex;
+  flex-direction: column;
+  font-family: proxima-nova;
+`;
+
+export const ShortcutBox = styled.div`
+  display: flex;
+  gap: 4px;
+  padding-left: 30px;
+`;
+
+export const ShortcutContent = styled.p`
+  font-size: 14px;
+  color: rgb(67, 67, 67);
+
+  cursor: pointer;
+`;
+
+export const CategoryTitle = styled.h2`
+  padding-top: 60px;
+  padding-bottom: 60px;
+  font-size: 40px;
+  text-align: center;
+`;
+
+export const CategoryBox = styled.div`
+  width: 1326px;
+  height: 63px;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+
+  cursor: pointer;
+`;
+
+export const CategoryContent = styled.div`
+  width: 190px;
+  height: 63px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-top: 2px solid rgb(85, 85, 85);
+  border-bottom: 1px solid rgb(85, 85, 85);
+
+  &:hover {
+    background-color: #ebebeb;
+  }
+`;
+
+export const ListContainer = styled.div`
+  max-width: 1110px;
   width: 100%;
   height: 100%;
-  margin: auto;
+  margin: 0 auto;
+`;
+
+export const ProductCount = styled.p`
+  font-size: 14px;
+  padding-bottom: 48px;
+  padding-top: 90px;
 `;
 
 export const ProductContainer = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-`;
-
-export const Title = styled.h2`
-  font-size: 18px;
-  font-family: proxima-nova;
-  font-weight: 600;
-  font-size: 20px;
-  padding-top: 20px;
-  padding-bottom: 50px;
-  text-align: center;
-`;
-
-export const TitleCount = styled.span`
-  color: #da1618;
+  flex-wrap: wrap;
 `;
 
 export const ProductWrapper = styled.div`
@@ -32,7 +76,7 @@ export const ProductWrapper = styled.div`
   flex-wrap: wrap;
   row-gap: 40px;
   column-gap: 20px;
-  column-gap: 40px;
+  /* column-gap: 40px; */
 `;
 
 export const ProductBox = styled.div`
@@ -97,34 +141,4 @@ export const Price = styled.p`
   padding-top: 12px;
   padding-left: 4px;
   padding-right: 4px;
-`;
-
-export const Advertisement = styled.div`
-  /* width: 100%;
-  height: 480px;
-  margin-top: 55px;
-  background-color: blue; */
-`;
-
-export const Hr = styled.hr`
-  width: 1200px;
-  margin-top: 56px;
-  /* border-color: #ebebeb; */
-  border: 1px solid #ebebeb;
-  /* border: 1px solid black; */
-`;
-
-export const MoreBtn = styled.button`
-  width: fit-content;
-  height: 42px;
-  background-color: white;
-  border: 1px solid #d3d3d3;
-  border-radius: 12px;
-  font-size: 14px;
-  color: #5e6564;
-  margin-top: 40px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 30px;
-  padding-right: 30px;
 `;

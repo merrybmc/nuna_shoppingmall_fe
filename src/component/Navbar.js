@@ -28,9 +28,10 @@ const Navbar = ({ user }) => {
     if (event.key === 'Enter') {
       if (event.target.value === '') {
         onSearch();
+        return navigate('/');
       }
       queryClient.invalidateQueries('[getproduct]');
-      navigate(`?name=${event.target.value}`);
+      navigate(`/?name=${event.target.value}`);
     }
   };
 
@@ -40,7 +41,7 @@ const Navbar = ({ user }) => {
       return navigate('/');
     }
     queryClient.invalidateQueries('[getproduct]');
-    navigate(`?name=${searchInput}`);
+    navigate(`/?name=${searchInput}`);
   };
 
   const { mutate: logoutMutate } = useLogoutMutation();
@@ -65,7 +66,9 @@ const Navbar = ({ user }) => {
       <S.Fixed>
         <S.Container>
           <S.UserMenu>
-            {userInfo?.data.level === 'admin' && <Link to='/admin/product?page=1'>ADMIN PAGE</Link>}
+            {userInfo?.data.level === 'admin' && searchInput === '' && (
+              <Link to='/admin/product?page=1'>ADMIN PAGE</Link>
+            )}
             <button onClick={() => navigate('/mypage/info')}>MYPAGE</button>
             <button
               onClick={() => {
@@ -102,7 +105,7 @@ const Navbar = ({ user }) => {
 
           <S.MenuList>
             {menuList.map((menu, index) => (
-              <S.Menu onClick={() => alert('coming soon')} key={index}>
+              <S.Menu onClick={() => navigate(`/product/${menu.toLowerCase()}/all`)} key={index}>
                 {menu}
               </S.Menu>
             ))}

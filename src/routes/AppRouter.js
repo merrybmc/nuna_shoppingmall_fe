@@ -16,6 +16,8 @@ import MyPage from '../page/Mypage';
 import Info from '../component/Mypage/Section/Info';
 import Delivery from '../component/Mypage/Section/Delivery';
 import DeleteUser from '../component/Mypage/Section/DeleteUser';
+import Product from '../page/MenuProduct';
+import MenuTable from '../component/Product/MenuTable';
 
 const AppRouter = () => {
   return (
@@ -23,7 +25,6 @@ const AppRouter = () => {
       <Route path='/' element={<ProductAll />} />
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<RegisterPage />} />
-      <Route path='/product/:id' element={<ProductDetail />} />
       <Route element={<PrivateRoute permissionLevel='customer' />}>
         <Route path='/cart' element={<CartPage />} />
         <Route path='/payment' element={<PaymentPage />} />
@@ -38,6 +39,9 @@ const AppRouter = () => {
         <Route path='info' element={<Info />} />
         <Route path='delivery' element={<Delivery />} />
         <Route path='deleteuser' element={<DeleteUser />} />
+      </Route>
+      <Route path='/product' element={<Product />}>
+        <Route path=':menu/:category' element={<MenuTable />} />
       </Route>
       <Route path='/auth/socialLoginCallback' element={<SocialLoginCallback />} />
     </Routes>

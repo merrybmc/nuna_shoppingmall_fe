@@ -19,7 +19,12 @@ export const getAsync = async (path, params = {}) => {
 
 // POST
 export const postAsync = async (path, data) => {
-  console.log(path, data);
   const res = await api.post(`${path}`, data);
+  return res.data;
+};
+
+// POST
+export const putAsync = async (path, data) => {
+  const res = await api.put(`${path}`, data);
   return res.data;
 };

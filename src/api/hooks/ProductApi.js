@@ -1,11 +1,20 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getAsync, postAsync } from '../api';
+import { putAsync } from './../api';
 
 // 상품 생성
 export const useProductCreateMutation = () => {
   return useMutation({
     mutationKey: ['productcreate'],
     mutationFn: ({ path, data }) => postAsync(path, data),
+  });
+};
+
+// 상품 수정
+export const useProductUpdateMutation = () => {
+  return useMutation({
+    mutationKey: ['productupdate'],
+    mutationFn: ({ path, data }) => putAsync(path, data),
   });
 };
 

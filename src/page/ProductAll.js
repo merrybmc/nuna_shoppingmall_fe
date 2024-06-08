@@ -9,7 +9,6 @@ const FILTER_DATA = ['men', 'women', 'kids', 'top', 'bottom', 'shoes', 'bag', 'a
 
 const ProductAll = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [query, setQuery] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(
     query.size !== 0
@@ -21,7 +20,7 @@ const ProductAll = () => {
 
   const { data } = useGetProductsQuery(
     '/product',
-    query.size === 0
+    query.size === 0 || (query.size === 1 && searchQuery.name === '')
       ? {
           kind: 'men,women,kids',
           category: 'top,bottom,shoes,bag,accessory',
@@ -31,21 +30,17 @@ const ProductAll = () => {
 
   useEffect(() => {
     const params = Object.fromEntries([...query.entries()]);
-    console.log(params);
     setSearchQuery(params);
   }, [location.search]);
 
   useEffect(() => {
-    console.log('query', query);
     const params = new URLSearchParams(searchQuery);
     setQuery(params);
   }, [searchQuery]);
 
-  console.log(data);
-
   return (
     <S.Container>
-      {!query.size ? (
+      {query.size === 0 || (query.size === 1 && searchQuery.name === '') ? (
         <div>
           {FILTER_DATA.map((filter) => (
             <ProductCard data={data} filter={filter} key={filter} />

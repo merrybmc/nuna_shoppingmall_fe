@@ -14,17 +14,10 @@ const AppLayout = ({ children }) => {
   return (
     <>
       <ToastMessage />
-      {location.pathname.includes('admin') ? (
-        <div>
-          <Sidebar />
-          {children}
-        </div>
-      ) : (
-        <>
-          <Navbar user={user} />
-          <Layout>{children}</Layout>
-        </>
-      )}
+      <>
+        <Navbar user={user} />
+        <Layout>{children}</Layout>
+      </>
     </>
   );
 };
