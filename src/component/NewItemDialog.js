@@ -33,6 +33,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const [imgPreviews, setImgPreviews] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const baseProduct = useRecoilValue(updateProductAtom);
+  const [defaultImage, setDefaultImage] = useState([]);
 
   useEffect(() => {
     if (mode === 'edit' && baseProduct) {
@@ -42,12 +43,15 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           return { preview: data };
         })
       );
+      setDefaultImage(
+        baseProduct.images.map((data) => {
+          return { data };
+        })
+      );
       const transformedStock = baseProduct.stock.flatMap((item) =>
         Object.entries(item).map(([key, value]) => [key, value])
       );
       setStock(transformedStock);
-      console.log(formData);
-      console.log(formData);
     }
   }, [baseProduct]);
 
@@ -80,11 +84,13 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
       setStockError(false);
     }
 
-    if (!imageFiles.length) {
-      setImageError(true);
-      return;
-    } else {
-      setImageError(false);
+    if (mode === 'new') {
+      if (!imageFiles.length) {
+        setImageError(true);
+        return;
+      } else {
+        setImageError(false);
+      }
     }
 
     const totalStock = stock.reduce((total, item) => {
@@ -101,6 +107,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     form.append('name', name);
     form.append('sku', sku);
     form.append('stock', JSON.stringify(totalStock));
+    form.append('defaultimage', JSON.stringify(defaultImage));
     form.append('description', description);
     form.append('kind', kind);
     form.append('category', category);
