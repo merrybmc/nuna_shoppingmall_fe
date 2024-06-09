@@ -3,7 +3,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Row, Col, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { currencyFormat } from '../utils/number';
-import { useDeleteCartMutation } from '../api/hooks/CartApi';
+import { useDeleteCartMutation, useUpdateCartQtyMutation } from '../api/hooks/CartApi';
 import { useQueryClient } from '@tanstack/react-query';
 
 const CartProductCard = ({ item }) => {
@@ -11,9 +11,20 @@ const CartProductCard = ({ item }) => {
 
   const queryClient = useQueryClient();
   const { mutate: deleteCartMutate } = useDeleteCartMutation();
+  const { mutate: qtyUpdateMutate } = useUpdateCartQtyMutation();
 
-  const handleQtyChange = () => {
-    //아이템 수량을 수정한다
+  const handleQtyChange = (id, qty) => {
+    qtyUpdateMutate(
+      { path: `cart/${id}`, data: { qty } },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['getcart']);
+        },
+        onError: () => {
+          alert('수정 실패');
+        },
+      }
+    );
   };
 
   const deleteCart = (id) => {
@@ -53,9 +64,9 @@ const CartProductCard = ({ item }) => {
           <div>
             Quantity:
             <Form.Select
-              onChange={(event) => handleQtyChange()}
+              onChange={(event) => handleQtyChange(item._id, event.target.value)}
               required
-              defaultValue={1}
+              defaultValue={item.qty}
               className='qty-dropdown'
             >
               <option value={1}>1</option>
