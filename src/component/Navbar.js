@@ -11,6 +11,7 @@ import * as S from './Navbar.styled';
 import SearchBox from './SearchBox';
 import { useQueryClient } from '@tanstack/react-query';
 import { LayoutMaxWidth } from '../style/common.styled';
+import { useGetQtyQuery } from '../api/hooks/CartApi';
 
 const menuList = ['WOMEN', 'MEN', 'KIDS', 'TOP', 'BOTTOM', 'SHOES', 'BAG', 'ACCESSORY'];
 
@@ -22,7 +23,7 @@ const Navbar = ({ user }) => {
 
   const { data: userInfo } = useGetUserInfoQuery('/user');
 
-  console.log(userInfo);
+  const { data: qty } = useGetQtyQuery('/cart/qty');
 
   const onCheckEnter = (event) => {
     if (event.key === 'Enter') {
@@ -72,11 +73,10 @@ const Navbar = ({ user }) => {
             <button onClick={() => navigate('/mypage/info')}>MYPAGE</button>
             <button
               onClick={() => {
-                alert('coming soon');
                 navigate('/cart');
               }}
             >
-              SHOPPING BAG
+              SHOPPING BAG {'('} {qty?.data} {')'}
             </button>
             {userInfo ? (
               <button onClick={logout} style={{ cursor: 'pointer' }}>

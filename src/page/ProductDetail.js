@@ -6,6 +6,7 @@ import { currencyFormat } from '../utils/number';
 import '../style/productDetail.style.css';
 import { useGetUserInfoQuery } from '../api/hooks/SignApi';
 import { useCartCreateMutation } from '../api/hooks/CartApi';
+import { useQueryClient } from '@tanstack/react-query';
 
 const ProductDetail = () => {
   const [size, setSize] = useState('');
@@ -14,10 +15,12 @@ const ProductDetail = () => {
 
   const { data: userInfo } = useGetUserInfoQuery('/user');
   const { mutate: createCartMutate, isSuccess, error } = useCartCreateMutation();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (isSuccess) {
       alert('카트 추가 성공');
+      queryClient.invalidateQueries(['getqty']);
     }
     if (error) {
       alert('이미 카트에 추가되어 있습니다.');

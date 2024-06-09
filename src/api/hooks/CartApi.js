@@ -32,3 +32,12 @@ export const useUpdateCartQtyMutation = () => {
     mutationFn: ({ path, data }) => putAsync(path, data),
   });
 };
+
+// qty 조회
+
+export const useGetQtyQuery = (path) => {
+  return useQuery({
+    queryKey: ['getqty'],
+    queryFn: () => getAsync(path),
+  });
+};
