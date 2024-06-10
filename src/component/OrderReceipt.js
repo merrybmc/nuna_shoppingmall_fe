@@ -30,7 +30,7 @@ const OrderReceipt = ({ items }) => {
             <div className='display-flex space-between'>
               <div>{item.productId.name}</div>
 
-              <div>₩ {currencyFormat(item.productId.price)}</div>
+              <div>₩ {currencyFormat(item.productId.price * item.qty)}</div>
             </div>
           </li>
         ))}
