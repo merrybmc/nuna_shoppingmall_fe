@@ -6,6 +6,8 @@ import '../style/paymentPage.style.css';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { cc_expires_format } from '../utils/number';
+import { useGetCartQuery } from '../api/hooks/CartApi';
+import { useCreateOrderMutation } from '../api/hooks/OrderApi';
 
 const PaymentPage = () => {
   const [cardValue, setCardValue] = useState({
@@ -26,19 +28,68 @@ const PaymentPage = () => {
     zip: '',
   });
 
-  //맨처음 페이지 로딩할때는 넘어가고  오더번호를 받으면 성공페이지로 넘어가기
+  const { data: items } = useGetCartQuery('/cart');
+
+  const [totalPrice, setTotalPrice] = useState();
+
+  const { mutate: createOrderMutate } = useCreateOrderMutation();
+
+  useEffect(() => {
+    if (items) {
+      const total = items?.data?.items?.reduce(
+        (total, item) => (total += item?.productId?.price * item?.qty),
+        0
+      );
+
+      setTotalPrice(total);
+    }
+  }, [items]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //오더 생성하가ㅣ
+    const { firstName, lastName, contact, address, city, zip } = shipInfo;
+    console.log(items);
+    const data = {
+      totalPrice,
+      shipTo: { address, city, zip },
+      contact: { firstName, lastName, contact },
+      orderList: items?.data?.items?.map((item) => {
+        return {
+          productId: item.productId._id,
+          price: item.productId.price,
+          qty: item.qty,
+          size: item.size,
+        };
+      }),
+    };
+    createOrderMutate(
+      { path: 'order', data },
+      {
+        onSuccess: (res) => {
+          console.log('res', res);
+          navigate('/payment/success', { state: { orderNum: res.data.orderNum } });
+        },
+        onError: () => {
+          alert('생성 실패');
+        },
+      }
+    );
   };
 
   const handleFormChange = (event) => {
     //shipInfo에 값 넣어주기
+    const { name, value } = event.target;
+    setShipInfo({ ...shipInfo, [name]: value });
   };
 
   const handlePaymentInfoChange = (event) => {
-    //카드정보 넣어주기
+    const { name, value } = event.target;
+    if (name === 'expiry') {
+      let newValue = cc_expires_format(value);
+      setCardValue({ ...cardValue, [name]: newValue });
+      return;
+    }
+    setCardValue({ ...cardValue, [name]: value });
   };
 
   const handleInputFocus = (e) => {
@@ -106,9 +157,16 @@ const PaymentPage = () => {
                     <Form.Control onChange={handleFormChange} required name='zip' />
                   </Form.Group>
                 </Row>
-                <div className='mobile-receipt-area'>{/* <OrderReceipt /> */}</div>
+                <div className='mobile-receipt-area'>
+                  <OrderReceipt items={items} />
+                </div>
                 <div>
                   <h2 className='payment-title'>결제 정보</h2>
+                  <PaymentForm
+                    cardValue={cardValue}
+                    handleInputFocus={handleInputFocus}
+                    handlePaymentInfoChange={handlePaymentInfoChange}
+                  />
                 </div>
 
                 <Button variant='dark' className='payment-button pay-button' type='submit'>
@@ -119,7 +177,7 @@ const PaymentPage = () => {
           </div>
         </Col>
         <Col lg={5} className='receipt-area'>
-          {/* <OrderReceipt /> */}
+          <OrderReceipt items={items} />
         </Col>
       </Row>
     </Container>

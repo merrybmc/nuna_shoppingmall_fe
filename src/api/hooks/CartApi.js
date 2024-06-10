@@ -34,7 +34,6 @@ export const useUpdateCartQtyMutation = () => {
 };
 
 // qty 조회
-
 export const useGetQtyQuery = (path) => {
   return useQuery({
     queryKey: ['getqty'],
