@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router';
 import { cc_expires_format } from '../utils/number';
 import { useGetCartQuery } from '../api/hooks/CartApi';
 import { useCreateOrderMutation } from '../api/hooks/OrderApi';
+import { useQueryClient } from '@tanstack/react-query';
 
 const PaymentPage = () => {
   const [cardValue, setCardValue] = useState({
@@ -19,6 +20,8 @@ const PaymentPage = () => {
   });
   const navigate = useNavigate();
   const [firstLoading, setFirstLoading] = useState(true);
+  const queryClient = useQueryClient();
+
   const [shipInfo, setShipInfo] = useState({
     firstName: '',
     lastName: '',
@@ -66,11 +69,12 @@ const PaymentPage = () => {
       { path: 'order', data },
       {
         onSuccess: (res) => {
-          console.log('res', res);
-          navigate('/payment/success', { state: { orderNum: res.data.orderNum } });
+          queryClient.invalidateQueries(['getqty']);
+          navigate('/payment/success', { state: { orderNum: res.orderNum } });
         },
-        onError: () => {
-          alert('생성 실패');
+        onError: (res) => {
+          queryClient.invalidateQueries(['getqty']);
+          navigate('/payment/success', { state: { orderNum: res.orderNum } });
         },
       }
     );
