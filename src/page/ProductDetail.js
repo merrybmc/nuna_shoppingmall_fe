@@ -31,8 +31,6 @@ const ProductDetail = () => {
     state: { product },
   } = useLocation();
 
-  console.log(product);
-
   const navigate = useNavigate();
 
   const addItemToCart = () => {
@@ -47,18 +45,6 @@ const ProductDetail = () => {
 
     createCartMutate({ path: '/cart', data: addProduct });
   };
-
-  const selectSize = (value) => {
-    // 사이즈 추가하기
-  };
-
-  //카트에러가 있으면 에러메세지 보여주기
-
-  //에러가 있으면 에러메세지 보여주기
-
-  useEffect(() => {
-    //상품 디테일 정보 가져오기
-  }, [id]);
 
   return (
     <Container className='product-detail-card'>
@@ -90,18 +76,17 @@ const ProductDetail = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu className='size-drop-down'>
-              {Object.keys(product.stock).length > 0 &&
-                Object.entries(product.stock[0]).map(([key, value]) =>
-                  value > 0 ? (
-                    <Dropdown.Item eventKey={key}>
-                      {`${key.toUpperCase()} : ${value}`}
-                    </Dropdown.Item>
-                  ) : (
-                    <Dropdown.Item eventKey={key} disabled={true}>
-                      {`${key.toUpperCase()} : ${value}`}
-                    </Dropdown.Item>
-                  )
-                )}
+              {Object.entries(product.stock).map(([key, value]) =>
+                value > 0 ? (
+                  <Dropdown.Item eventKey={key} key={key}>
+                    {`${key.toUpperCase()} : ${value}`}
+                  </Dropdown.Item>
+                ) : (
+                  <Dropdown.Item eventKey={key} key={key} disabled={true}>
+                    {`${key.toUpperCase()} : ${value}`}
+                  </Dropdown.Item>
+                )
+              )}
             </Dropdown.Menu>
           </Dropdown>
           <div className='warning-message'>{sizeError && '사이즈를 선택해주세요.'}</div>

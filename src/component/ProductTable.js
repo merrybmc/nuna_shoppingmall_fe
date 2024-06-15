@@ -19,15 +19,12 @@ const ProductTable = ({ products, header, deleteItem, openEditForm }) => {
               <S.Name>{item.name}</S.Name>
               <S.Price>{currencyFormat(item?.price)}원</S.Price>
               <th>
-                {item?.stock?.map((count) => (
-                  <S.Stock key={count.size}>
-                    {Object.entries(count).map(([size, quantity]) => (
-                      <div key={size}>
-                        {size}: {quantity}
-                      </div>
-                    ))}
-                  </S.Stock>
-                ))}
+                {item?.stock &&
+                  Object.entries(item.stock).map(([size, quantity]) => (
+                    <S.Stock key={size}>
+                      {size}: {quantity}
+                    </S.Stock>
+                  ))}
               </th>
               <th>
                 <S.ImageBox>

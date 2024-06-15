@@ -59,7 +59,7 @@ const CartProductCard = ({ item }) => {
           <div>
             <strong>₩ {currencyFormat(item.productId.price)}</strong>
           </div>
-          <div>Size: {Object.keys(item.productId.stock[0])[0].toUpperCase()}</div>
+          <div>Size: {item.size.toUpperCase()}</div>
           <div>Total: ₩ {currencyFormat(item.productId.price * item.qty)}</div>
           <div>
             Quantity:
@@ -69,16 +69,11 @@ const CartProductCard = ({ item }) => {
               defaultValue={item.qty}
               className='qty-dropdown'
             >
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-              <option value={6}>6</option>
-              <option value={7}>7</option>
-              <option value={8}>8</option>
-              <option value={9}>9</option>
-              <option value={10}>10</option>
+              {[...Array(10).keys()].map((num) => (
+                <option key={num + 1} value={num + 1}>
+                  {num + 1}
+                </option>
+              ))}
             </Form.Select>
           </div>
         </Col>

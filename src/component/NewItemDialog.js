@@ -26,7 +26,6 @@ const InitialFormData = {
 
 const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
   const [formData, setFormData] = useState(InitialFormData);
-  const [stock, setStock] = useState([]);
   const [skuError, setSkuError] = useState(false);
   const [stockError, setStockError] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -48,10 +47,10 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           return { data };
         })
       );
-      const transformedStock = baseProduct.stock.flatMap((item) =>
-        Object.entries(item).map(([key, value]) => [key, value])
-      );
-      setStock(transformedStock);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        stock: baseProduct.stock,
+      }));
     }
   }, [baseProduct]);
 
@@ -67,7 +66,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     setImageError(false);
     setImgPreviews([]);
     setImageFiles([]);
-    setStock([]);
     setShowDialog(false);
   };
 
@@ -77,28 +75,23 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     if (formData.kind === '' && formData.category === '') {
       alert('kind 또는 category를 선택해주세요');
     }
-    if (!stock.length) {
+
+    if (Object.keys(formData.stock).length === 0) {
       setStockError(true);
       return;
     } else {
       setStockError(false);
     }
 
-    if (mode === 'new') {
-      if (!imageFiles.length) {
-        setImageError(true);
-        return;
-      } else {
-        setImageError(false);
-      }
+    if (mode === 'new' && imageFiles.length === 0) {
+      setImageError(true);
+      return;
+    } else {
+      setImageError(false);
     }
 
-    const totalStock = stock.reduce((total, item) => {
-      return { ...total, [item[0]]: parseInt(item[1]) };
-    }, {});
-
     let form = new FormData();
-    const { name, sku, description, kind, category, status, price } = formData;
+    const { name, sku, description, kind, category, status, price, stock } = formData;
 
     imageFiles.forEach((file) => {
       form.append('images', file);
@@ -106,7 +99,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
     form.append('name', name);
     form.append('sku', sku);
-    form.append('stock', JSON.stringify(totalStock));
+    form.append('stock', JSON.stringify(stock));
     form.append('defaultimage', JSON.stringify(defaultImage));
     form.append('description', description);
     form.append('kind', kind);
@@ -114,7 +107,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     form.append('status', status);
     form.append('price', price);
 
-    if (mode === 'new')
+    if (mode === 'new') {
       createMutate(
         { path: '/product', data: form },
         {
@@ -127,8 +120,7 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           },
         }
       );
-
-    if (mode === 'edit')
+    } else if (mode === 'edit') {
       updateMutate(
         { path: `/product/${formData._id}`, data: form },
         {
@@ -141,37 +133,47 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
           },
         }
       );
+    }
   };
 
-  //form에 데이터 넣어주기
+  // 폼에 데이터 넣어주기
   const handleChange = (event) => {
     const { id, value } = event.target;
     setFormData({ ...formData, [id]: value });
   };
 
-  //재고타입 추가시 배열에 새 배열 추가
+  // 재고 추가
   const addStock = () => {
-    setStock([...stock, []]);
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      stock: { ...prevFormData.stock, '': '' },
+    }));
   };
 
-  //재고 삭제하기
-  const deleteStock = (idx) => {
-    const newStock = stock.filter((item, index) => index !== idx);
-    setStock(newStock);
+  // 재고 삭제
+  const deleteStock = (size) => {
+    const newStock = { ...formData.stock };
+    delete newStock[size];
+    setFormData({ ...formData, stock: newStock });
   };
 
-  //  재고 사이즈 변환하기
-  const handleSizeChange = (value, index) => {
-    const newStock = [...stock];
-    newStock[index][0] = value;
-    setStock(newStock);
+  // 재고 사이즈 변경
+  const handleSizeChange = (event, oldSize) => {
+    const { value } = event.target;
+    if (value === '') return;
+
+    const newStock = { ...formData.stock };
+    const qty = newStock[oldSize];
+    delete newStock[oldSize];
+    newStock[value] = qty;
+    setFormData({ ...formData, stock: newStock });
   };
 
-  // 재고 수량 변경하기
-  const handleStockChange = (value, index) => {
-    const newStock = [...stock];
-    newStock[index][1] = value;
-    setStock(newStock);
+  // 재고 수량 변경
+  const handleStockChange = (event, size) => {
+    const { value } = event.target;
+    const newStock = { ...formData.stock, [size]: value };
+    setFormData({ ...formData, stock: newStock });
   };
 
   // 종류 변경
@@ -184,38 +186,23 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
 
   // 카테고리 변경
   const onHandleCategory = (event) => {
-    console.log(event.target.value);
     setFormData({
       ...formData,
       category: event.target.value,
     });
   };
 
-  useEffect(() => {
-    if (showDialog) {
-      if (mode === 'edit') {
-        // 선택된 데이터값 불러오기 (재고 형태 객체에서 어레이로 바꾸기)
-      } else {
-        // 초기화된 값 불러오기
-      }
-    }
-  }, [showDialog]);
-
-  //에러나면 토스트 메세지 보여주기
-
-  // 이미지 생성 시작 target.files 넘기기
+  // 이미지 처리 로직
   const handleFileChange = (e) => {
     e.target.files && processFiles(e.target.files);
   };
 
-  // 이미지 끌어와서 생성하기
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     e.dataTransfer.files && processFiles(e.dataTransfer.files);
   };
 
-  // 이미지 업로드 로직, 조건 검사
   const processFiles = (fileList) => {
     let sameFileCheck = false;
 
@@ -249,7 +236,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     });
   };
 
-  // 이미지 리사이징
   const resizeImage = (file) => {
     return new Promise((resolve) => {
       const img = new Image();
@@ -287,7 +273,6 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
     });
   };
 
-  // 이미지 삭제
   const deleteImage = (id) => {
     const deletedImgPreviews = imgPreviews.filter((file) => id !== file.id);
     const deletedImageFiles = imageFiles.filter((file) => id !== file.lastModified);
@@ -352,40 +337,39 @@ const NewItemDialog = ({ mode, showDialog, setShowDialog }) => {
             Add +
           </Button>
           <div className='mt-2'>
-            {stock.map((item, index) => (
+            {Object.entries(formData.stock).map(([size, qty], index) => (
               <Row key={index}>
                 <Col sm={4}>
                   <Form.Select
-                    onChange={(event) => handleSizeChange(event.target.value, index)}
+                    onChange={(event) => handleSizeChange(event, size)}
                     required
-                    defaultValue={item[0] ? item[0].toLowerCase() : ''}
+                    defaultValue={size}
                   >
-                    <option value='' disabled selected hidden>
+                    <option value='' disabled hidden>
                       Please Choose...
                     </option>
-                    {SIZE.map((item, index) => (
+                    {SIZE.map((sizeOption, idx) => (
                       <option
-                        invalid='true'
-                        value={item.toLowerCase()}
-                        disabled={stock.some((size) => size[0] === item.toLowerCase())}
-                        key={index}
+                        value={sizeOption}
+                        disabled={Object.keys(formData.stock).includes(sizeOption)}
+                        key={idx}
                       >
-                        {item}
+                        {sizeOption}
                       </option>
                     ))}
                   </Form.Select>
                 </Col>
                 <Col sm={6}>
                   <Form.Control
-                    onChange={(event) => handleStockChange(event.target.value, index)}
+                    onChange={(event) => handleStockChange(event, size)}
                     type='number'
                     placeholder='number of stock'
-                    value={item[1]}
+                    value={qty}
                     required
                   />
                 </Col>
                 <Col sm={2}>
-                  <Button variant='danger' size='sm' onClick={() => deleteStock(index)}>
+                  <Button variant='danger' size='sm' onClick={() => deleteStock(size)}>
                     -
                   </Button>
                 </Col>

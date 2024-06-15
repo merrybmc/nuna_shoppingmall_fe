@@ -17,6 +17,9 @@ export default function Tab() {
       <ContentWrapper>
         <ContentBox>
           <SubTitle>나의 정보</SubTitle>
+          <Content content={content === 'purchase'} onClick={() => onNavigate('purchase')}>
+            주문내역
+          </Content>
           <Content content={content === 'info'} onClick={() => onNavigate('info')}>
             개인정보관리
           </Content>

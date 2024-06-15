@@ -18,6 +18,8 @@ import Delivery from '../component/Mypage/Section/Delivery';
 import DeleteUser from '../component/Mypage/Section/DeleteUser';
 import Product from '../page/MenuProduct';
 import MenuTable from '../component/Product/MenuTable';
+import OrderStatusCard from '../component/OrderStatusCard';
+import Purchase from '../component/Mypage/Section/Purchase';
 
 const AppRouter = () => {
   return (
@@ -29,7 +31,6 @@ const AppRouter = () => {
         <Route path='/cart' element={<CartPage />} />
         <Route path='/payment' element={<PaymentPage />} />
         <Route path='/payment/success' element={<OrderCompletePage />} />
-        <Route path='/account/purchase' element={<MyPageS />} />
       </Route>
       <Route element={<PrivateRoute permissionLevel='admin' />}>
         <Route path='/admin/product' element={<AdminProduct />} />
@@ -39,6 +40,7 @@ const AppRouter = () => {
         <Route path='info' element={<Info />} />
         <Route path='delivery' element={<Delivery />} />
         <Route path='deleteuser' element={<DeleteUser />} />
+        <Route path='purchase' element={<Purchase />} />
       </Route>
       <Route path='/product' element={<Product />}>
         <Route path=':menu/:category' element={<MenuTable />} />

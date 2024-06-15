@@ -10,10 +10,12 @@ import { useGetProductsQuery } from '../api/hooks/ProductApi';
 const AdminOrderPage = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useSearchParams();
+
   const [searchQuery, setSearchQuery] = useState({
     page: query.get('page') || 1,
     ordernum: query.get('ordernum') || '',
   });
+
   const [open, setOpen] = useState(false);
   const tableHeader = [
     '#',
@@ -27,6 +29,10 @@ const AdminOrderPage = () => {
   ];
 
   const { data: products } = useGetProductsQuery('/product');
+
+  useEffect(() => {
+    console.log('product', products);
+  }, []);
 
   useEffect(() => {}, [query]);
 
