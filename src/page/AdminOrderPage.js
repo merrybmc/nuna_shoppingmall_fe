@@ -5,7 +5,7 @@ import OrderDetailDialog from '../component/OrderDetailDialog';
 import OrderTable from '../component/OrderTable';
 import ReactPaginate from 'react-paginate';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useGetProductsQuery } from '../api/hooks/ProductApi';
+import { useGetAdminOrderListQuery } from '../api/hooks/OrderApi';
 
 const AdminOrderPage = () => {
   const navigate = useNavigate();
@@ -28,11 +28,12 @@ const AdminOrderPage = () => {
     'Status',
   ];
 
-  const { data: products } = useGetProductsQuery('/product');
+  // const { data: products } = useGetProductsQuery('/product');
+  const { data: orderList } = useGetAdminOrderListQuery('/order');
 
   useEffect(() => {
-    console.log('product', products);
-  }, []);
+    if (orderList) console.log('order', orderList);
+  }, [orderList]);
 
   useEffect(() => {}, [query]);
 
@@ -70,7 +71,7 @@ const AdminOrderPage = () => {
           />
         </div>
 
-        <OrderTable header={tableHeader} data={products} openEditForm={openEditForm} />
+        <OrderTable header={tableHeader} data={orderList} openEditForm={openEditForm} />
         <ReactPaginate
           nextLabel='next >'
           onPageChange={handlePageClick}

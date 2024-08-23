@@ -1,13 +1,7 @@
 import React, { useEffect } from 'react';
 import { Row, Col, Badge } from 'react-bootstrap';
 import { currencyFormat } from '../utils/number';
-
-const badgeBg = {
-  preparing: 'primary',
-  shipping: 'warning',
-  refund: 'danger',
-  delivered: 'success',
-};
+import styled from 'styled-components';
 
 const OrderStatusCard = ({ item }) => {
   useEffect(() => {
@@ -18,7 +12,8 @@ const OrderStatusCard = ({ item }) => {
     <div>
       <Row className='status-card'>
         <Col xs={2}>
-          <img
+          <ProductImg
+            j
             src={item.items[0]?.productId?.images[0]}
             alt={item.items[0]?.productId?.image}
             height={96}
@@ -37,13 +32,15 @@ const OrderStatusCard = ({ item }) => {
           </div>
           <div>₩ {currencyFormat(item.totalPrice)}</div>
         </Col>
-        <Col md={2} className='vertical-middle'>
-          <div className='text-align-center text-12'>주문상태</div>
-          <Badge bg={badgeBg[item.status]}>{item.status}</Badge>
-        </Col>
       </Row>
     </div>
   );
 };
 
 export default OrderStatusCard;
+
+const ProductImg = styled.img`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

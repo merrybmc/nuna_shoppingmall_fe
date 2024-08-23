@@ -14,3 +14,10 @@ export const useGetOrderListQuery = (path) => {
     queryFn: () => getAsync(path),
   });
 };
+
+export const useGetAdminOrderListQuery = (path) => {
+  return useQuery({
+    queryKey: ['getadminorderlist'],
+    queryFn: () => getAsync(path),
+  });
+};

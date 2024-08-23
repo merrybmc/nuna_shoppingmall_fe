@@ -4,7 +4,6 @@ import AdminOrderPage from '../page/AdminOrderPage';
 import AdminProduct from '../page/AdminProduct';
 import CartPage from '../page/CartPage';
 import Login from '../page/Login';
-import MyPageS from '../page/MyPageS';
 import OrderCompletePage from '../page/OrderCompletePage';
 import PaymentPage from '../page/PaymentPage';
 import ProductAll from '../page/ProductAll';
@@ -18,7 +17,6 @@ import Delivery from '../component/Mypage/Section/Delivery';
 import DeleteUser from '../component/Mypage/Section/DeleteUser';
 import Product from '../page/MenuProduct';
 import MenuTable from '../component/Product/MenuTable';
-import OrderStatusCard from '../component/OrderStatusCard';
 import Purchase from '../component/Mypage/Section/Purchase';
 
 const AppRouter = () => {

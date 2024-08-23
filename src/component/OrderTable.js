@@ -1,7 +1,17 @@
 import React from 'react';
 import { Table, Badge } from 'react-bootstrap';
 import { currencyFormat } from '../utils/number';
+
+const badgeBg = {
+  preparing: 'primary',
+  shipping: 'warning',
+  refund: 'danger',
+  delivered: 'success',
+};
+
 const OrderTable = ({ header, data, openEditForm }) => {
+  console.log(data?.data);
+
   return (
     <div className='overflow-x'>
       <Table striped bordered hover>
@@ -13,8 +23,8 @@ const OrderTable = ({ header, data, openEditForm }) => {
           </tr>
         </thead>
         <tbody>
-          {data.length > 0 ? (
-            data.map((item, index) => (
+          {data?.data?.length > 0 ? (
+            data?.data?.map((item, index) => (
               <tr onClick={() => openEditForm(item)}>
                 <th>{index}</th>
                 <th>{item.orderNum}</th>
@@ -32,7 +42,9 @@ const OrderTable = ({ header, data, openEditForm }) => {
                 <th>{item.shipTo.address + ' ' + item.shipTo.city}</th>
 
                 <th>{currencyFormat(item.totalPrice)}</th>
-                <th>{/* <Badge bg={badgeBg[item.status]}>{item.status}</Badge> */}</th>
+                <th>
+                  <Badge bg={badgeBg[item.status]}>{item.status}</Badge>
+                </th>
               </tr>
             ))
           ) : (

@@ -6,7 +6,7 @@
 // import { currencyFormat } from '../utils/number';
 
 // const OrderDetailDialog = ({ open, handleClose }) => {
-//   // const selectedOrder = useSelector((state) => state.order.selectedOrder);
+
 //   // const [orderStatus, setOrderStatus] = useState(selectedOrder.status);
 //   // const dispatch = useDispatch();
 

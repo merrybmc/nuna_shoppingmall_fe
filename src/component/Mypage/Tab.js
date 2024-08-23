@@ -23,9 +23,9 @@ export default function Tab() {
           <Content content={content === 'info'} onClick={() => onNavigate('info')}>
             개인정보관리
           </Content>
-          <Content content={content === 'delivery'} onClick={() => onNavigate('delivery')}>
+          {/* <Content content={content === 'delivery'} onClick={() => onNavigate('delivery')}>
             배송지 관리
-          </Content>
+          </Content> */}
           <Content content={content === 'deleteuser'} onClick={() => onNavigate('deleteuser')}>
             회원탈퇴
           </Content>

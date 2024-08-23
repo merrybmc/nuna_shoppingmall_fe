@@ -47,19 +47,21 @@ export default function MenuTable() {
         <S.ShortcutContent>{category.toUpperCase()}</S.ShortcutContent>
       </S.ShortcutBox>
       <S.CategoryTitle>{menu.toUpperCase()}</S.CategoryTitle>
-      <S.CategoryBox>
-        {menuCategory.map((item) => {
-          return (
-            <S.CategoryContent
-              onClick={() => {
-                navigate(`/product/${menu}/${item.toLowerCase()}`);
-              }}
-            >
-              {item}
-            </S.CategoryContent>
-          );
-        })}
-      </S.CategoryBox>
+      {(menu === 'women' || menu === 'men' || menu === 'kids') && (
+        <S.CategoryBox>
+          {menuCategory.map((item) => {
+            return (
+              <S.CategoryContent
+                onClick={() => {
+                  navigate(`/product/${menu}/${item.toLowerCase()}`);
+                }}
+              >
+                {item}
+              </S.CategoryContent>
+            );
+          })}
+        </S.CategoryBox>
+      )}
       <S.ListContainer>
         <S.ProductCount>총 {productList?.data?.products?.length}개의 상품</S.ProductCount>
         <S.ProductWrapper>
